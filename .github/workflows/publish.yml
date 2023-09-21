@@ -1,0 +1,52 @@
+name: publish sdk
+
+on:
+  pull_request:
+    types:
+      - closed
+    paths:
+      - src/**
+      - package.json
+      - tsconfig.json
+      - tsconfig.*.json
+      - .github/workflows/publish.yml
+  
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  publish:
+    if: ${{ github.event.pull_request.merged == true }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3 # Checkout our working repository
+    - name: Conventional Changelog Action
+      id: changelog
+      uses: TriPSs/conventional-changelog-action@v3
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        output-file: false
+        pre-release: true
+        git-push: true
+        skip-on-empty: false
+        skip-tag: true
+        git-message: 'chore(release): {version}'
+        # skip-version-file: false
+        # skip-commit: false
+    - uses: actions/setup-node@v3
+      id: setup-node
+      with:
+        node-version: 18.15
+        cache: yarn
+        registry-url: https://registry.npmjs.org
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_CHROMATIC }}    
+    
+    # publish package to npm
+    - name: build and publish
+      run: |
+        yarn install
+        yarn build
+        yarn pub
+
