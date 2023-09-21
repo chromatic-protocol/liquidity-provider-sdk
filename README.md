@@ -1,1 +1,1 @@
-# liquidity-pool-sdk
+# liquidity-provider-sdk
