@@ -1,5 +1,5 @@
 {
-  "name": "@chromatic-protocol/liquidity-pool-sdk",
+  "name": "@chromatic-protocol/liquidity-provider-sdk",
   "license": "MIT",
   "version": "1.0.1-rc.0",
   "main": "./dist/cjs/index.js",
@@ -41,7 +41,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chromatic-protocol/liquidity-pool-sdk.git"
+    "url": "git+https://github.com/chromatic-protocol/liquidity-provider-sdk.git"
   },
   "devDependencies": {
     "@types/debug": "^4.1.8",

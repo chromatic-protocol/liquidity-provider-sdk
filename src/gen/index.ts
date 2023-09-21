@@ -8,6 +8,7 @@ export const chromaticLpABI = [
     type: 'constructor',
     inputs: [
       { name: 'lpLogic', internalType: 'contract ChromaticLPLogic', type: 'address' },
+      { name: 'lpName_', internalType: 'string', type: 'string' },
       {
         name: 'config',
         internalType: 'struct ChromaticLPStorage.Config',
@@ -16,7 +17,7 @@ export const chromaticLpABI = [
           { name: 'market', internalType: 'contract IChromaticMarket', type: 'address' },
           { name: 'utilizationTargetBPS', internalType: 'uint16', type: 'uint16' },
           { name: 'rebalanceBPS', internalType: 'uint16', type: 'uint16' },
-          { name: 'rebalnceCheckingInterval', internalType: 'uint256', type: 'uint256' },
+          { name: 'rebalanceCheckingInterval', internalType: 'uint256', type: 'uint256' },
           { name: 'settleCheckingInterval', internalType: 'uint256', type: 'uint256' }
         ]
       },
@@ -111,7 +112,11 @@ export const chromaticLpABI = [
   {
     type: 'event',
     anonymous: false,
-    inputs: [{ name: 'receiptId', internalType: 'uint256', type: 'uint256', indexed: true }],
+    inputs: [
+      { name: 'receiptId', internalType: 'uint256', type: 'uint256', indexed: true },
+      { name: 'burningAmount', internalType: 'uint256', type: 'uint256', indexed: false },
+      { name: 'remainingAmount', internalType: 'uint256', type: 'uint256', indexed: false }
+    ],
     name: 'RemoveLiquiditySettled'
   },
   {
@@ -334,6 +339,13 @@ export const chromaticLpABI = [
     ],
     name: 'increaseAllowance',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'lpName',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }]
   },
   {
     stateMutability: 'view',
@@ -601,7 +613,7 @@ export const chromaticLpABI = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xB4Db00d1E88049b6a07f96E87882C3F6B53A392E)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x6aCb459786a91Fb6B00E263bac543427EDc6Ad04)
  */
 export const chromaticLpRegistryABI = [
   {
@@ -692,14 +704,14 @@ export const chromaticLpRegistryABI = [
 ] as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xB4Db00d1E88049b6a07f96E87882C3F6B53A392E)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x6aCb459786a91Fb6B00E263bac543427EDc6Ad04)
  */
 export const chromaticLpRegistryAddress = {
-  421613: '0xB4Db00d1E88049b6a07f96E87882C3F6B53A392E'
+  421613: '0x6aCb459786a91Fb6B00E263bac543427EDc6Ad04'
 } as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xB4Db00d1E88049b6a07f96E87882C3F6B53A392E)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x6aCb459786a91Fb6B00E263bac543427EDc6Ad04)
  */
 export const chromaticLpRegistryConfig = {
   address: chromaticLpRegistryAddress,
