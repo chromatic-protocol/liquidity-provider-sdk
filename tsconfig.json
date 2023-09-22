@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
     "strict": true,
-    "module": "NodeNext",
+    "module": "ESNext",
     "outDir": "./esm",
     "target": "esnext",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "Node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "declaration": true,
