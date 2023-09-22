@@ -1,13 +1,7 @@
-import type { PublicClient as PublicClientType, WalletClient as WalletClientType } from "viem";
+import type { PublicClient, WalletClient } from "viem";
 import { Address, getContract } from "viem";
 import { chromaticLpABI, chromaticLpRegistryABI, chromaticLpRegistryAddress } from "./gen";
 import type { ContractChromaticLP, ContractChromaticLPRegistry } from "./types";
-
-/** @ignore */
-export interface WalletClient extends WalletClientType {}
-
-/** @ignore */
-export interface PublicClient extends PublicClientType {}
 
 export class Client {
   public walletClient: WalletClient | undefined;
