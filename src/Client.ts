@@ -1,8 +1,6 @@
 import type { PublicClient, WalletClient } from "viem";
-import { Address, getContract } from "viem";
-import { chromaticLpABI, chromaticLpRegistryABI, chromaticLpRegistryAddress } from "./gen";
-import type { ContractChromaticLP, ContractChromaticLPRegistry } from "./types";
-
+import { ChromaticLP } from "./entities/ChromaticLP";
+import { ChromaticRegistry } from "./entities/ChromaticRegistry";
 export class Client {
   public walletClient: WalletClient | undefined;
   public publicClient: PublicClient | undefined;
@@ -21,24 +19,11 @@ export class Client {
     return this.publicClient?.chain?.name;
   }
 
-  registry(address?: Address): ContractChromaticLPRegistry {
-    const deployedRegistryAddress = (chromaticLpRegistryAddress as Record<number, Address>)[
-      this.publicClient?.chain?.id || 0
-    ];
-    return getContract({
-      address: address || deployedRegistryAddress,
-      abi: chromaticLpRegistryABI,
-      publicClient: this.publicClient,
-      walletClient: this.walletClient,
-    });
+  registry(): ChromaticRegistry {
+    return new ChromaticRegistry(this);
   }
 
-  lp(lpAddress: Address): ContractChromaticLP {
-    return getContract({
-      address: lpAddress,
-      abi: chromaticLpABI,
-      publicClient: this.publicClient,
-      walletClient: this.walletClient,
-    });
+  lp(): ChromaticLP {
+    return new ChromaticLP(this);
   }
 }

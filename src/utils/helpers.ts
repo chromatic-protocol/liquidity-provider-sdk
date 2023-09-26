@@ -10,6 +10,7 @@ import {
   GetContractReturnType,
   PublicClient,
   WalletClient,
+  hexToBigInt,
   keccak256,
   toHex,
 } from "viem";
@@ -81,3 +82,7 @@ export const errorSignitures: ErrorSignatures = [...chromaticLpABI, ...chromatic
     prevErrMap[signature] = errName;
     return prevErrMap;
   }, {} as ErrorSignatures);
+
+export const MAX_UINT256 = hexToBigInt(
+  "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+);
