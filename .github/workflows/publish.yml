@@ -32,6 +32,9 @@ jobs:
         skip-on-empty: false
         skip-tag: true
         git-message: 'chore(release): {version}'
+        git-user-name: 'Changelog Action'
+        git-user-email: 'noreply-chromatic-protocol@github.com'    
+        
         # skip-version-file: false
         # skip-commit: false
     - uses: actions/setup-node@v3
