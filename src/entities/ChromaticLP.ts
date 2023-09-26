@@ -67,6 +67,155 @@ export class ChromaticLP {
     });
   }
 
+  async utilization(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.utilization({
+        account: this._client.walletClient!.account,
+      });
+    });
+  }
+
+  async totalValue(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.totalValue({
+        account: this._client.walletClient!.account,
+      });
+    });
+  }
+
+  async valueInfo(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.valueInfo({
+        account: this._client.walletClient!.account,
+      });
+    });
+  }
+
+  async holdingValue(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.holdingValue({
+        account: this._client.walletClient!.account,
+      });
+    });
+  }
+
+  async pendingValue(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.pendingValue({
+        account: this._client.walletClient!.account,
+      });
+    });
+  }
+
+  async holdingClbValue(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.holdingClbValue({
+        account: this._client.walletClient!.account,
+      });
+    });
+  }
+
+  async pendingClbValue(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.pendingClbValue({
+        account: this._client.walletClient!.account,
+      });
+    });
+  }
+
+  async totalClbValue(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.totalClbValue({
+        account: this._client.walletClient!.account,
+      });
+    });
+  }
+
+  async feeRates(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.feeRates({
+        account: this._client.walletClient!.account,
+      });
+    });
+  }
+
+  async clbTokenIds(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.clbTokenIds({
+        account: this._client.walletClient!.account,
+      });
+    });
+  }
+
+  async clbTokenBalances(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.clbTokenIds({
+        account: this._client.walletClient!.account,
+      });
+    });
+  }
+
+  async lpTokenMeta(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      const lpContract = await this.contracts().lpToken(lpAddress);
+      const [name, symbol, decimals] = await Promise.all([
+        lpContract.read.name(),
+        lpContract.read.symbol(),
+        lpContract.read.decimals(),
+      ]);
+      return {
+        name,
+        symbol,
+        decimals,
+      };
+    });
+  }
+
+  async totalSupply(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.totalSupply({
+        account: this._client.walletClient!.account,
+      });
+    });
+  }
+
+  async balanceOf(lpAddress: Address, account: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.balanceOf([account], {
+        account: this._client.walletClient!.account,
+      });
+    });
+  }
+
+  async allowance(lpAddress: Address, owner: Address, spender: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.allowance([owner, spender], {
+        account: this._client.walletClient!.account,
+      });
+    });
+  }
+
+  async transferFrom(
+    lpAddress: Address,
+    from: Address,
+    to: Address,
+    amount: bigint
+  ): Promise<boolean> {
+    checkClient(this._client);
+    const account = this._client.walletClient.account!.address;
+    return await handleBytesError(async () => {
+      checkClient(this._client);
+      const { request } = await this.contracts()
+        .lp(lpAddress)
+        .simulate.transferFrom([from, to, amount], {
+          account: account,
+        });
+      const hash = await this._client.walletClient.writeContract(request);
+      const receipt = await this._client.publicClient.waitForTransactionReceipt({ hash });
+      return receipt !== undefined;
+    });
+  }
+
   async approveSettlementTokenToLp(lpAddress: Address, amount: bigint): Promise<boolean> {
     checkClient(this._client);
     const settlementToken = await this.contracts().settlementToken(lpAddress);
