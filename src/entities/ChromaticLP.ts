@@ -25,7 +25,7 @@ export class ChromaticLP {
         }),
       lpToken: async (lpAddress: Address): Promise<ContractIErc20Metadata> =>
         getContract({
-          address: await this.settlementToken(lpAddress),
+          address: lpAddress,
           abi: ierc20MetadataABI,
           publicClient: this._client.publicClient,
           walletClient: this._client.walletClient,
