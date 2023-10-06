@@ -74,7 +74,6 @@ interface ErrorSignatures {
   [key: string]: string;
 }
 
-// TODO add other errors from base contracts
 export const errorSignitures: ErrorSignatures = [...iChromaticLpABI, ...chromaticLpRegistryABI]
   .filter((abi) => abi.type === "error")
   .reduce((prevErrMap, currErrAbi) => {
