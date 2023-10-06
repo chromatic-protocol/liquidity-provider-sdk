@@ -1,6 +1,6 @@
 import { Address, getContract } from "viem";
 import { Client } from "../Client";
-import { chromaticLpABI, ierc20MetadataABI } from "../gen";
+import { iChromaticLpABI, ierc20MetadataABI } from "../gen";
 import type { ContractChromaticLP, ContractIErc20Metadata } from "../types";
 import { MAX_UINT256, checkClient, handleBytesError } from "../utils/helpers";
 
@@ -12,7 +12,7 @@ export class ChromaticLP {
       lp: (lpAddress: Address): ContractChromaticLP =>
         getContract({
           address: lpAddress,
-          abi: chromaticLpABI,
+          abi: iChromaticLpABI,
           publicClient: this._client.publicClient,
           walletClient: this._client.walletClient,
         }),
@@ -23,7 +23,7 @@ export class ChromaticLP {
           publicClient: this._client.publicClient,
           walletClient: this._client.walletClient,
         }),
-      lpToken: async (lpAddress: Address): Promise<ContractIErc20Metadata> =>
+      lpToken: (lpAddress: Address): ContractIErc20Metadata =>
         getContract({
           address: lpAddress,
           abi: ierc20MetadataABI,
@@ -173,7 +173,7 @@ export class ChromaticLP {
 
   async totalSupply(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.totalSupply({
+      return await this.contracts().lpToken(lpAddress).read.totalSupply({
         account: this._client.walletClient!.account,
       });
     });
@@ -181,7 +181,7 @@ export class ChromaticLP {
 
   async balanceOf(lpAddress: Address, account: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.balanceOf([account], {
+      return await this.contracts().lpToken(lpAddress).read.balanceOf([account], {
         account: this._client.walletClient!.account,
       });
     });
@@ -189,7 +189,7 @@ export class ChromaticLP {
 
   async allowance(lpAddress: Address, owner: Address, spender: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.allowance([owner, spender], {
+      return await this.contracts().lpToken(lpAddress).read.allowance([owner, spender], {
         account: this._client.walletClient!.account,
       });
     });
@@ -206,7 +206,7 @@ export class ChromaticLP {
     return await handleBytesError(async () => {
       checkClient(this._client);
       const { request } = await this.contracts()
-        .lp(lpAddress)
+        .lpToken(lpAddress)
         .simulate.transferFrom([from, to, amount], {
           account: account,
         });
@@ -320,18 +320,18 @@ export class ChromaticLP {
     });
   }
 
-  async resolveSettle(lpAddress: Address, receiptId: bigint): Promise<boolean> {
-    // for debugging
-    const [canExec] = await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.resolveSettle([receiptId]);
-    });
-    return canExec;
-  }
-  async resolveRebalance(lpAddress: Address): Promise<boolean> {
-    // for debugging
-    const [canExec] = await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.resolveRebalance();
-    });
-    return canExec;
-  }
+  // async resolveSettle(lpAddress: Address, receiptId: bigint): Promise<boolean> {
+  //   // for debugging
+  //   const [canExec] = await handleBytesError(async () => {
+  //     return await this.contracts().lp(lpAddress).read.resolveSettle([receiptId]);
+  //   });
+  //   return canExec;
+  // }
+  // async resolveRebalance(lpAddress: Address): Promise<boolean> {
+  //   // for debugging
+  //   const [canExec] = await handleBytesError(async () => {
+  //     return await this.contracts().lp(lpAddress).read.resolveRebalance();
+  //   });
+  //   return canExec;
+  // }
 }

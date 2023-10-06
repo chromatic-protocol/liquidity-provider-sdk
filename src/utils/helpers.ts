@@ -1,5 +1,5 @@
 import { Client } from "../Client";
-import { chromaticLpABI, chromaticLpRegistryABI } from "../gen";
+import { chromaticLpRegistryABI, iChromaticLpABI } from "../gen";
 
 import {
   Abi,
@@ -74,7 +74,8 @@ interface ErrorSignatures {
   [key: string]: string;
 }
 
-export const errorSignitures: ErrorSignatures = [...chromaticLpABI, ...chromaticLpRegistryABI]
+// TODO add other errors from base contracts
+export const errorSignitures: ErrorSignatures = [...iChromaticLpABI, ...chromaticLpRegistryABI]
   .filter((abi) => abi.type === "error")
   .reduce((prevErrMap, currErrAbi) => {
     const errName = (currErrAbi as any)["name"];
