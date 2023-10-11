@@ -3,8 +3,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * - [__View Contract on Mantle Testnet Mantle Testnet Explorer__](https://explorer.testnet.mantle.xyz/address/0xD1A749646cFD5AB74e7dD7D987d51E91600A973d)
- * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x8e4aB74BB858b3B35Bde3dfED4A118b060116821)
+ * - [__View Contract on Mantle Testnet Mantle Testnet Explorer__](https://explorer.testnet.mantle.xyz/address/0x343EaF10341e6e58C75A2d0102a212e9f6816702)
+ * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xe4255112ACBDD83c629AFFCB2bF75B1bBbC2dbCC)
  */
 export const chromaticLpRegistryABI = [
   {
@@ -101,17 +101,17 @@ export const chromaticLpRegistryABI = [
 ] as const;
 
 /**
- * - [__View Contract on Mantle Testnet Mantle Testnet Explorer__](https://explorer.testnet.mantle.xyz/address/0xD1A749646cFD5AB74e7dD7D987d51E91600A973d)
- * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x8e4aB74BB858b3B35Bde3dfED4A118b060116821)
+ * - [__View Contract on Mantle Testnet Mantle Testnet Explorer__](https://explorer.testnet.mantle.xyz/address/0x343EaF10341e6e58C75A2d0102a212e9f6816702)
+ * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xe4255112ACBDD83c629AFFCB2bF75B1bBbC2dbCC)
  */
 export const chromaticLpRegistryAddress = {
-  5001: "0xD1A749646cFD5AB74e7dD7D987d51E91600A973d",
-  421613: "0x8e4aB74BB858b3B35Bde3dfED4A118b060116821",
+  5001: "0x343EaF10341e6e58C75A2d0102a212e9f6816702",
+  421613: "0xe4255112ACBDD83c629AFFCB2bF75B1bBbC2dbCC",
 } as const;
 
 /**
- * - [__View Contract on Mantle Testnet Mantle Testnet Explorer__](https://explorer.testnet.mantle.xyz/address/0xD1A749646cFD5AB74e7dD7D987d51E91600A973d)
- * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x8e4aB74BB858b3B35Bde3dfED4A118b060116821)
+ * - [__View Contract on Mantle Testnet Mantle Testnet Explorer__](https://explorer.testnet.mantle.xyz/address/0x343EaF10341e6e58C75A2d0102a212e9f6816702)
+ * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xe4255112ACBDD83c629AFFCB2bF75B1bBbC2dbCC)
  */
 export const chromaticLpRegistryConfig = {
   address: chromaticLpRegistryAddress,
@@ -366,6 +366,26 @@ export const iChromaticLpABI = [
           { name: "action", internalType: "enum ChromaticLPAction", type: "uint8" },
         ],
       },
+    ],
+  },
+  {
+    stateMutability: "view",
+    type: "function",
+    inputs: [],
+    name: "resolveRebalance",
+    outputs: [
+      { name: "upkeepNeeded", internalType: "bool", type: "bool" },
+      { name: "performData", internalType: "bytes", type: "bytes" },
+    ],
+  },
+  {
+    stateMutability: "view",
+    type: "function",
+    inputs: [{ name: "receiptId", internalType: "uint256", type: "uint256" }],
+    name: "resolveSettle",
+    outputs: [
+      { name: "upkeepNeeded", internalType: "bool", type: "bool" },
+      { name: "performData", internalType: "bytes", type: "bytes" },
     ],
   },
   {
