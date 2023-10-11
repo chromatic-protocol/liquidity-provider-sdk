@@ -320,18 +320,23 @@ export class ChromaticLP {
     });
   }
 
-  // async resolveSettle(lpAddress: Address, receiptId: bigint): Promise<boolean> {
-  //   // for debugging
-  //   const [canExec] = await handleBytesError(async () => {
-  //     return await this.contracts().lp(lpAddress).read.resolveSettle([receiptId]);
-  //   });
-  //   return canExec;
-  // }
-  // async resolveRebalance(lpAddress: Address): Promise<boolean> {
-  //   // for debugging
-  //   const [canExec] = await handleBytesError(async () => {
-  //     return await this.contracts().lp(lpAddress).read.resolveRebalance();
-  //   });
-  //   return canExec;
-  // }
+  async resolveSettle(lpAddress: Address, receiptId: bigint): Promise<boolean> {
+    // for debugging
+    const [canExec] = await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.resolveSettle([receiptId], {
+        account: this._client.publicClient?.account,
+      });
+    });
+    return canExec;
+  }
+
+  async resolveRebalance(lpAddress: Address): Promise<boolean> {
+    // for debugging
+    const [canExec] = await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.resolveRebalance({
+        account: this._client.publicClient?.account,
+      });
+    });
+    return canExec;
+  }
 }
