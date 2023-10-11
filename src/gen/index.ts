@@ -4,7 +4,7 @@
 
 /**
  * - [__View Contract on Mantle Testnet Mantle Testnet Explorer__](https://explorer.testnet.mantle.xyz/address/0x343EaF10341e6e58C75A2d0102a212e9f6816702)
- * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xe4255112ACBDD83c629AFFCB2bF75B1bBbC2dbCC)
+ * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x773D7737c3431e29D73A33e0B9Fc22e2aB97aEdB)
  */
 export const chromaticLpRegistryABI = [
   {
@@ -102,16 +102,16 @@ export const chromaticLpRegistryABI = [
 
 /**
  * - [__View Contract on Mantle Testnet Mantle Testnet Explorer__](https://explorer.testnet.mantle.xyz/address/0x343EaF10341e6e58C75A2d0102a212e9f6816702)
- * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xe4255112ACBDD83c629AFFCB2bF75B1bBbC2dbCC)
+ * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x773D7737c3431e29D73A33e0B9Fc22e2aB97aEdB)
  */
 export const chromaticLpRegistryAddress = {
   5001: "0x343EaF10341e6e58C75A2d0102a212e9f6816702",
-  421613: "0xe4255112ACBDD83c629AFFCB2bF75B1bBbC2dbCC",
+  421613: "0x773D7737c3431e29D73A33e0B9Fc22e2aB97aEdB",
 } as const;
 
 /**
  * - [__View Contract on Mantle Testnet Mantle Testnet Explorer__](https://explorer.testnet.mantle.xyz/address/0x343EaF10341e6e58C75A2d0102a212e9f6816702)
- * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xe4255112ACBDD83c629AFFCB2bF75B1bBbC2dbCC)
+ * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x773D7737c3431e29D73A33e0B9Fc22e2aB97aEdB)
  */
 export const chromaticLpRegistryConfig = {
   address: chromaticLpRegistryAddress,
