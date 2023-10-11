@@ -54,7 +54,7 @@ export class ChromaticLP {
   async getReceiptIdsOf(lpAddress: Address, owner: Address): Promise<readonly bigint[]> {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.getReceiptIdsOf([owner], {
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -62,7 +62,7 @@ export class ChromaticLP {
   async getReceipt(lpAddress: Address, receiptId: bigint) {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.getReceipt([receiptId], {
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -70,7 +70,7 @@ export class ChromaticLP {
   async utilization(lpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.utilization({
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -78,7 +78,7 @@ export class ChromaticLP {
   async totalValue(lpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.totalValue({
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -86,7 +86,7 @@ export class ChromaticLP {
   async valueInfo(lpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.valueInfo({
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -94,7 +94,7 @@ export class ChromaticLP {
   async holdingValue(lpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.holdingValue({
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -102,7 +102,7 @@ export class ChromaticLP {
   async pendingValue(lpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.pendingValue({
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -110,7 +110,7 @@ export class ChromaticLP {
   async holdingClbValue(lpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.holdingClbValue({
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -118,7 +118,7 @@ export class ChromaticLP {
   async pendingClbValue(lpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.pendingClbValue({
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -126,7 +126,7 @@ export class ChromaticLP {
   async totalClbValue(lpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.totalClbValue({
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -134,7 +134,7 @@ export class ChromaticLP {
   async feeRates(lpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.feeRates({
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -142,7 +142,7 @@ export class ChromaticLP {
   async clbTokenIds(lpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.clbTokenIds({
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -150,7 +150,7 @@ export class ChromaticLP {
   async clbTokenBalances(lpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.clbTokenIds({
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -174,7 +174,7 @@ export class ChromaticLP {
   async totalSupply(lpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lpToken(lpAddress).read.totalSupply({
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -182,7 +182,7 @@ export class ChromaticLP {
   async balanceOf(lpAddress: Address, account: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lpToken(lpAddress).read.balanceOf([account], {
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -190,7 +190,7 @@ export class ChromaticLP {
   async allowance(lpAddress: Address, owner: Address, spender: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lpToken(lpAddress).read.allowance([owner, spender], {
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }

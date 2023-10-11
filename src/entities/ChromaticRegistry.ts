@@ -29,7 +29,7 @@ export class ChromaticRegistry {
   async lpListByMarket(marketAddress: Address): Promise<readonly Address[]> {
     return await handleBytesError(async () => {
       return await this.contracts().registry.read.lpListByMarket([marketAddress], {
-        account: this._client.walletClient!.account,
+        account: this._client.publicClient?.account,
       });
     });
   }
@@ -38,7 +38,7 @@ export class ChromaticRegistry {
       return await this.contracts().registry.read.lpListBySettlementToken(
         [settlementTokenAddress],
         {
-          account: this._client.walletClient!.account,
+          account: this._client.publicClient?.account,
         }
       );
     });
