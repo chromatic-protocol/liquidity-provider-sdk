@@ -4,7 +4,7 @@
 
 /**
  * - [__View Contract on Mantle Testnet Mantle Testnet Explorer__](https://explorer.testnet.mantle.xyz/address/0x343EaF10341e6e58C75A2d0102a212e9f6816702)
- * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x773D7737c3431e29D73A33e0B9Fc22e2aB97aEdB)
+ * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x2018ce3b15b7a60614397E2a4082218c6c98fa8F)
  */
 export const chromaticLpRegistryABI = [
   {
@@ -48,6 +48,13 @@ export const chromaticLpRegistryABI = [
     inputs: [],
     name: 'factory',
     outputs: [{ name: '', internalType: 'contract IChromaticMarketFactory', type: 'address' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'lpList',
+    outputs: [{ name: 'lpAddresses', internalType: 'address[]', type: 'address[]' }]
   },
   {
     stateMutability: 'view',
@@ -102,16 +109,16 @@ export const chromaticLpRegistryABI = [
 
 /**
  * - [__View Contract on Mantle Testnet Mantle Testnet Explorer__](https://explorer.testnet.mantle.xyz/address/0x343EaF10341e6e58C75A2d0102a212e9f6816702)
- * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x773D7737c3431e29D73A33e0B9Fc22e2aB97aEdB)
+ * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x2018ce3b15b7a60614397E2a4082218c6c98fa8F)
  */
 export const chromaticLpRegistryAddress = {
   5001: '0x343EaF10341e6e58C75A2d0102a212e9f6816702',
-  421613: '0x773D7737c3431e29D73A33e0B9Fc22e2aB97aEdB'
+  421613: '0x2018ce3b15b7a60614397E2a4082218c6c98fa8F'
 } as const
 
 /**
  * - [__View Contract on Mantle Testnet Mantle Testnet Explorer__](https://explorer.testnet.mantle.xyz/address/0x343EaF10341e6e58C75A2d0102a212e9f6816702)
- * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x773D7737c3431e29D73A33e0B9Fc22e2aB97aEdB)
+ * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x2018ce3b15b7a60614397E2a4082218c6c98fa8F)
  */
 export const chromaticLpRegistryConfig = {
   address: chromaticLpRegistryAddress,
