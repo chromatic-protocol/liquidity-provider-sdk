@@ -26,6 +26,13 @@ export class ChromaticRegistry {
     };
   }
 
+  async lpList(): Promise<readonly Address[]> {
+    return await handleBytesError(async () => {
+      return await this.contracts().registry.read.lpList({
+        account: this._client.publicClient?.account,
+      });
+    });
+  }
   async lpListByMarket(marketAddress: Address): Promise<readonly Address[]> {
     return await handleBytesError(async () => {
       return await this.contracts().registry.read.lpListByMarket([marketAddress], {
