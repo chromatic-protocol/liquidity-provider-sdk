@@ -3,8 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * - [__View Contract on Mantle Testnet Mantle Testnet Explorer__](https://explorer.testnet.mantle.xyz/address/0x343EaF10341e6e58C75A2d0102a212e9f6816702)
- * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x2018ce3b15b7a60614397E2a4082218c6c98fa8F)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xc86b7f0eC3447CE6a7dfaC35F0513383b212C7e2)
  */
 export const chromaticLpRegistryABI = [
   {
@@ -108,17 +107,14 @@ export const chromaticLpRegistryABI = [
 ] as const
 
 /**
- * - [__View Contract on Mantle Testnet Mantle Testnet Explorer__](https://explorer.testnet.mantle.xyz/address/0x343EaF10341e6e58C75A2d0102a212e9f6816702)
- * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x2018ce3b15b7a60614397E2a4082218c6c98fa8F)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xc86b7f0eC3447CE6a7dfaC35F0513383b212C7e2)
  */
 export const chromaticLpRegistryAddress = {
-  5001: '0x343EaF10341e6e58C75A2d0102a212e9f6816702',
-  421613: '0x2018ce3b15b7a60614397E2a4082218c6c98fa8F'
+  421613: '0xc86b7f0eC3447CE6a7dfaC35F0513383b212C7e2'
 } as const
 
 /**
- * - [__View Contract on Mantle Testnet Mantle Testnet Explorer__](https://explorer.testnet.mantle.xyz/address/0x343EaF10341e6e58C75A2d0102a212e9f6816702)
- * - [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x2018ce3b15b7a60614397E2a4082218c6c98fa8F)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xc86b7f0eC3447CE6a7dfaC35F0513383b212C7e2)
  */
 export const chromaticLpRegistryConfig = {
   address: chromaticLpRegistryAddress,
@@ -160,6 +156,7 @@ export const iChromaticLpABI = [
     anonymous: false,
     inputs: [
       { name: 'receiptId', internalType: 'uint256', type: 'uint256', indexed: true },
+      { name: 'provider', internalType: 'address', type: 'address', indexed: true },
       { name: 'recipient', internalType: 'address', type: 'address', indexed: true },
       { name: 'oracleVersion', internalType: 'uint256', type: 'uint256', indexed: false },
       { name: 'amount', internalType: 'uint256', type: 'uint256', indexed: false }
@@ -171,6 +168,8 @@ export const iChromaticLpABI = [
     anonymous: false,
     inputs: [
       { name: 'receiptId', internalType: 'uint256', type: 'uint256', indexed: true },
+      { name: 'provider', internalType: 'address', type: 'address', indexed: true },
+      { name: 'recipient', internalType: 'address', type: 'address', indexed: true },
       { name: 'settlementAdded', internalType: 'uint256', type: 'uint256', indexed: false },
       { name: 'lpTokenAmount', internalType: 'uint256', type: 'uint256', indexed: false }
     ],
@@ -179,8 +178,23 @@ export const iChromaticLpABI = [
   {
     type: 'event',
     anonymous: false,
-    inputs: [{ name: 'receiptId', internalType: 'uint256', type: 'uint256', indexed: true }],
-    name: 'RebalanceLiquidity'
+    inputs: [
+      { name: 'receiptId', internalType: 'uint256', type: 'uint256', indexed: true },
+      { name: 'oracleVersion', internalType: 'uint256', type: 'uint256', indexed: false },
+      { name: 'amount', internalType: 'uint256', type: 'uint256', indexed: false },
+      { name: 'currentUtility', internalType: 'uint256', type: 'uint256', indexed: false }
+    ],
+    name: 'RebalanceAddLiquidity'
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'receiptId', internalType: 'uint256', type: 'uint256', indexed: true },
+      { name: 'oracleVersion', internalType: 'uint256', type: 'uint256', indexed: false },
+      { name: 'currentUtility', internalType: 'uint256', type: 'uint256', indexed: false }
+    ],
+    name: 'RebalanceRemoveLiquidity'
   },
   {
     type: 'event',
@@ -193,6 +207,7 @@ export const iChromaticLpABI = [
     anonymous: false,
     inputs: [
       { name: 'receiptId', internalType: 'uint256', type: 'uint256', indexed: true },
+      { name: 'provider', internalType: 'address', type: 'address', indexed: true },
       { name: 'recipient', internalType: 'address', type: 'address', indexed: true },
       { name: 'oracleVersion', internalType: 'uint256', type: 'uint256', indexed: false },
       { name: 'lpTokenAmount', internalType: 'uint256', type: 'uint256', indexed: false }
@@ -204,6 +219,8 @@ export const iChromaticLpABI = [
     anonymous: false,
     inputs: [
       { name: 'receiptId', internalType: 'uint256', type: 'uint256', indexed: true },
+      { name: 'provider', internalType: 'address', type: 'address', indexed: true },
+      { name: 'recipient', internalType: 'address', type: 'address', indexed: true },
       { name: 'burningAmount', internalType: 'uint256', type: 'uint256', indexed: false },
       {
         name: 'witdrawnSettlementAmount',
@@ -230,10 +247,11 @@ export const iChromaticLpABI = [
         type: 'tuple',
         components: [
           { name: 'id', internalType: 'uint256', type: 'uint256' },
+          { name: 'provider', internalType: 'address', type: 'address' },
+          { name: 'recipient', internalType: 'address', type: 'address' },
           { name: 'oracleVersion', internalType: 'uint256', type: 'uint256' },
           { name: 'amount', internalType: 'uint256', type: 'uint256' },
           { name: 'pendingLiquidity', internalType: 'uint256', type: 'uint256' },
-          { name: 'recipient', internalType: 'address', type: 'address' },
           { name: 'action', internalType: 'enum ChromaticLPAction', type: 'uint8' }
         ]
       }
@@ -272,7 +290,7 @@ export const iChromaticLpABI = [
     type: 'function',
     inputs: [],
     name: 'feeRates',
-    outputs: [{ name: 'feeRates', internalType: 'int16[]', type: 'int16[]' }]
+    outputs: [{ name: '', internalType: 'int16[]', type: 'int16[]' }]
   },
   {
     stateMutability: 'view',
@@ -286,10 +304,11 @@ export const iChromaticLpABI = [
         type: 'tuple',
         components: [
           { name: 'id', internalType: 'uint256', type: 'uint256' },
+          { name: 'provider', internalType: 'address', type: 'address' },
+          { name: 'recipient', internalType: 'address', type: 'address' },
           { name: 'oracleVersion', internalType: 'uint256', type: 'uint256' },
           { name: 'amount', internalType: 'uint256', type: 'uint256' },
           { name: 'pendingLiquidity', internalType: 'uint256', type: 'uint256' },
-          { name: 'recipient', internalType: 'address', type: 'address' },
           { name: 'action', internalType: 'enum ChromaticLPAction', type: 'uint8' }
         ]
       }
@@ -348,6 +367,13 @@ export const iChromaticLpABI = [
     stateMutability: 'view',
     type: 'function',
     inputs: [],
+    name: 'pendingRemoveClbBalances',
+    outputs: [{ name: 'pendingBalances', internalType: 'uint256[]', type: 'uint256[]' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
     name: 'pendingValue',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
@@ -366,10 +392,11 @@ export const iChromaticLpABI = [
         type: 'tuple',
         components: [
           { name: 'id', internalType: 'uint256', type: 'uint256' },
+          { name: 'provider', internalType: 'address', type: 'address' },
+          { name: 'recipient', internalType: 'address', type: 'address' },
           { name: 'oracleVersion', internalType: 'uint256', type: 'uint256' },
           { name: 'amount', internalType: 'uint256', type: 'uint256' },
           { name: 'pendingLiquidity', internalType: 'uint256', type: 'uint256' },
-          { name: 'recipient', internalType: 'address', type: 'address' },
           { name: 'action', internalType: 'enum ChromaticLPAction', type: 'uint8' }
         ]
       }
