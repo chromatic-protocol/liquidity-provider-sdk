@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xc86b7f0eC3447CE6a7dfaC35F0513383b212C7e2)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x15313Bf57C830ca83335D3DC303D022FAaB3bC71)
  */
 export const chromaticLpRegistryABI = [
   {
@@ -107,14 +107,14 @@ export const chromaticLpRegistryABI = [
 ] as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xc86b7f0eC3447CE6a7dfaC35F0513383b212C7e2)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x15313Bf57C830ca83335D3DC303D022FAaB3bC71)
  */
 export const chromaticLpRegistryAddress = {
-  421613: '0xc86b7f0eC3447CE6a7dfaC35F0513383b212C7e2'
+  421613: '0x15313Bf57C830ca83335D3DC303D022FAaB3bC71'
 } as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xc86b7f0eC3447CE6a7dfaC35F0513383b212C7e2)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x15313Bf57C830ca83335D3DC303D022FAaB3bC71)
  */
 export const chromaticLpRegistryConfig = {
   address: chromaticLpRegistryAddress,
