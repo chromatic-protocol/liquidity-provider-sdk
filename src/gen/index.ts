@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x6fE4577eCD947a652D2301709298efBE79b7a864)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x6d104ba65578014fA21a4DE95199b65B55b332E6)
  */
 export const chromaticLpRegistryABI = [
   {
@@ -107,14 +107,14 @@ export const chromaticLpRegistryABI = [
 ] as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x6fE4577eCD947a652D2301709298efBE79b7a864)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x6d104ba65578014fA21a4DE95199b65B55b332E6)
  */
 export const chromaticLpRegistryAddress = {
-  421613: '0x6fE4577eCD947a652D2301709298efBE79b7a864'
+  421613: '0x6d104ba65578014fA21a4DE95199b65B55b332E6'
 } as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x6fE4577eCD947a652D2301709298efBE79b7a864)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x6d104ba65578014fA21a4DE95199b65B55b332E6)
  */
 export const chromaticLpRegistryConfig = {
   address: chromaticLpRegistryAddress,
@@ -171,7 +171,8 @@ export const iChromaticLpABI = [
       { name: 'provider', internalType: 'address', type: 'address', indexed: true },
       { name: 'recipient', internalType: 'address', type: 'address', indexed: true },
       { name: 'settlementAdded', internalType: 'uint256', type: 'uint256', indexed: false },
-      { name: 'lpTokenAmount', internalType: 'uint256', type: 'uint256', indexed: false }
+      { name: 'lpTokenAmount', internalType: 'uint256', type: 'uint256', indexed: false },
+      { name: 'keeperFee', internalType: 'uint256', type: 'uint256', indexed: false }
     ],
     name: 'AddLiquiditySettled'
   },
@@ -199,7 +200,10 @@ export const iChromaticLpABI = [
   {
     type: 'event',
     anonymous: false,
-    inputs: [{ name: 'receiptId', internalType: 'uint256', type: 'uint256', indexed: true }],
+    inputs: [
+      { name: 'receiptId', internalType: 'uint256', type: 'uint256', indexed: true },
+      { name: 'keeperFee', internalType: 'uint256', type: 'uint256', indexed: false }
+    ],
     name: 'RebalanceSettled'
   },
   {
@@ -228,7 +232,8 @@ export const iChromaticLpABI = [
         type: 'uint256',
         indexed: false
       },
-      { name: 'refundedAmount', internalType: 'uint256', type: 'uint256', indexed: false }
+      { name: 'refundedAmount', internalType: 'uint256', type: 'uint256', indexed: false },
+      { name: 'keeperFee', internalType: 'uint256', type: 'uint256', indexed: false }
     ],
     name: 'RemoveLiquiditySettled'
   },
