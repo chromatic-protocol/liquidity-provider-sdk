@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x6d104ba65578014fA21a4DE95199b65B55b332E6)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x1186090a0BF3934978461c7c507C085aC18d0a5e)
  */
 export const chromaticLpRegistryABI = [
   {
@@ -107,14 +107,14 @@ export const chromaticLpRegistryABI = [
 ] as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x6d104ba65578014fA21a4DE95199b65B55b332E6)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x1186090a0BF3934978461c7c507C085aC18d0a5e)
  */
 export const chromaticLpRegistryAddress = {
-  421613: '0x6d104ba65578014fA21a4DE95199b65B55b332E6'
+  421613: '0x1186090a0BF3934978461c7c507C085aC18d0a5e'
 } as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x6d104ba65578014fA21a4DE95199b65B55b332E6)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x1186090a0BF3934978461c7c507C085aC18d0a5e)
  */
 export const chromaticLpRegistryConfig = {
   address: chromaticLpRegistryAddress,
@@ -426,6 +426,13 @@ export const iChromaticLpABI = [
       { name: 'upkeepNeeded', internalType: 'bool', type: 'bool' },
       { name: 'performData', internalType: 'bytes', type: 'bytes' }
     ]
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [{ name: 'automationFeeReserved', internalType: 'uint256', type: 'uint256' }],
+    name: 'setAutomationFeeReserved',
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
