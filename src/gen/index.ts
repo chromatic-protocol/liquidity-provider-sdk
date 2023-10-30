@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x1186090a0BF3934978461c7c507C085aC18d0a5e)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xc6212A7af77e0A1c9F8A994f3a25a2c7bbDB8d5c)
  */
 export const chromaticLpRegistryABI = [
   {
@@ -13,6 +13,8 @@ export const chromaticLpRegistryABI = [
       { name: '_factory', internalType: 'contract IChromaticMarketFactory', type: 'address' }
     ]
   },
+  { type: 'error', inputs: [], name: 'AlreadyRegistered' },
+  { type: 'error', inputs: [], name: 'NotRegistered' },
   { type: 'error', inputs: [], name: 'OnlyAccessableByOwner' },
   {
     type: 'event',
@@ -107,14 +109,14 @@ export const chromaticLpRegistryABI = [
 ] as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x1186090a0BF3934978461c7c507C085aC18d0a5e)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xc6212A7af77e0A1c9F8A994f3a25a2c7bbDB8d5c)
  */
 export const chromaticLpRegistryAddress = {
-  421613: '0x1186090a0BF3934978461c7c507C085aC18d0a5e'
+  421613: '0xc6212A7af77e0A1c9F8A994f3a25a2c7bbDB8d5c'
 } as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x1186090a0BF3934978461c7c507C085aC18d0a5e)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xc6212A7af77e0A1c9F8A994f3a25a2c7bbDB8d5c)
  */
 export const chromaticLpRegistryConfig = {
   address: chromaticLpRegistryAddress,
@@ -128,7 +130,6 @@ export const chromaticLpRegistryConfig = {
 export const iChromaticLpABI = [
   { type: 'error', inputs: [], name: 'AlreadyRebalanceTaskExist' },
   { type: 'error', inputs: [], name: 'AlreadySwapRouterConfigured' },
-  { type: 'error', inputs: [], name: 'InvalidDistributionSum' },
   { type: 'error', inputs: [], name: 'InvalidRebalanceBPS' },
   {
     type: 'error',
@@ -345,6 +346,13 @@ export const iChromaticLpABI = [
     type: 'function',
     inputs: [],
     name: 'lpName',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'lpTag',
     outputs: [{ name: '', internalType: 'string', type: 'string' }]
   },
   {
