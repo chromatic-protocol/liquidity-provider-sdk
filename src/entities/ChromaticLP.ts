@@ -50,7 +50,11 @@ export class ChromaticLP {
       return await this.contracts().lp(lpAddress).read.lpName();
     });
   }
-
+  async getLpTag(lpAddress: Address): Promise<string> {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.lpTag();
+    });
+  }
   async getReceiptIdsOf(lpAddress: Address, owner: Address): Promise<readonly bigint[]> {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.getReceiptIdsOf([owner], {
