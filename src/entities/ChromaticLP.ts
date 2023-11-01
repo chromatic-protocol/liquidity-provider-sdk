@@ -198,7 +198,49 @@ export class ChromaticLP {
       });
     });
   }
-
+  async automationFeeReserved(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.automationFeeReserved({
+        account: this._client.publicClient?.account,
+      });
+    });
+  }
+  async distributionRates(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.distributionRates({
+        account: this._client.publicClient?.account,
+      });
+    });
+  }
+  async rebalanceBPS(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.rebalanceBPS({
+        account: this._client.publicClient?.account,
+      });
+    });
+  }
+  async rebalanceCheckingInterval(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.rebalanceCheckingInterval({
+        account: this._client.publicClient?.account,
+      });
+    });
+  }
+  async settleCheckingInterval(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.settleCheckingInterval({
+        account: this._client.publicClient?.account,
+      });
+    });
+  }
+  async utilizationTargetBPS(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.utilizationTargetBPS({
+        account: this._client.publicClient?.account,
+      });
+    });
+  }
+  
   async transferFrom(
     lpAddress: Address,
     from: Address,
