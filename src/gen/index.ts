@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xc6212A7af77e0A1c9F8A994f3a25a2c7bbDB8d5c)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io/address/0x96931F585C5C687736b6FbB8f04bB37c98Ac224E)
  */
 export const chromaticLpRegistryABI = [
   {
@@ -109,14 +109,14 @@ export const chromaticLpRegistryABI = [
 ] as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xc6212A7af77e0A1c9F8A994f3a25a2c7bbDB8d5c)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io/address/0x96931F585C5C687736b6FbB8f04bB37c98Ac224E)
  */
 export const chromaticLpRegistryAddress = {
-  421613: '0xc6212A7af77e0A1c9F8A994f3a25a2c7bbDB8d5c'
+  421613: '0x96931F585C5C687736b6FbB8f04bB37c98Ac224E'
 } as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0xc6212A7af77e0A1c9F8A994f3a25a2c7bbDB8d5c)
+ * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io/address/0x96931F585C5C687736b6FbB8f04bB37c98Ac224E)
  */
 export const chromaticLpRegistryConfig = {
   address: chromaticLpRegistryAddress,
@@ -129,7 +129,6 @@ export const chromaticLpRegistryConfig = {
 
 export const iChromaticLpABI = [
   { type: 'error', inputs: [], name: 'AlreadyRebalanceTaskExist' },
-  { type: 'error', inputs: [], name: 'AlreadySwapRouterConfigured' },
   { type: 'error', inputs: [], name: 'InvalidRebalanceBPS' },
   {
     type: 'error',
@@ -228,7 +227,7 @@ export const iChromaticLpABI = [
       { name: 'recipient', internalType: 'address', type: 'address', indexed: true },
       { name: 'burningAmount', internalType: 'uint256', type: 'uint256', indexed: false },
       {
-        name: 'witdrawnSettlementAmount',
+        name: 'withdrawnSettlementAmount',
         internalType: 'uint256',
         type: 'uint256',
         indexed: false
@@ -237,6 +236,18 @@ export const iChromaticLpABI = [
       { name: 'keeperFee', internalType: 'uint256', type: 'uint256', indexed: false }
     ],
     name: 'RemoveLiquiditySettled'
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [{ name: 'name', internalType: 'string', type: 'string', indexed: false }],
+    name: 'SetLpName'
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [{ name: 'tag', internalType: 'string', type: 'string', indexed: false }],
+    name: 'SetLpTag'
   },
   {
     stateMutability: 'nonpayable',
@@ -262,6 +273,13 @@ export const iChromaticLpABI = [
         ]
       }
     ]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'automationFeeReserved',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
   {
     stateMutability: 'nonpayable',
@@ -290,6 +308,13 @@ export const iChromaticLpABI = [
     inputs: [],
     name: 'createRebalanceTask',
     outputs: []
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'distributionRates',
+    outputs: [{ name: '', internalType: 'uint16[]', type: 'uint16[]' }]
   },
   {
     stateMutability: 'view',
@@ -391,6 +416,20 @@ export const iChromaticLpABI = [
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
   {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'rebalanceBPS',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'rebalanceCheckingInterval',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
+  },
+  {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
@@ -438,8 +477,22 @@ export const iChromaticLpABI = [
   {
     stateMutability: 'nonpayable',
     type: 'function',
-    inputs: [{ name: 'automationFeeReserved', internalType: 'uint256', type: 'uint256' }],
+    inputs: [{ name: '_automationFeeReserved', internalType: 'uint256', type: 'uint256' }],
     name: 'setAutomationFeeReserved',
+    outputs: []
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [{ name: 'newName', internalType: 'string', type: 'string' }],
+    name: 'setLpName',
+    outputs: []
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [{ name: 'newTag', internalType: 'string', type: 'string' }],
+    name: 'setLpTag',
     outputs: []
   },
   {
@@ -448,6 +501,13 @@ export const iChromaticLpABI = [
     inputs: [{ name: 'receiptId', internalType: 'uint256', type: 'uint256' }],
     name: 'settle',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'settleCheckingInterval',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
   {
     stateMutability: 'view',
@@ -476,6 +536,13 @@ export const iChromaticLpABI = [
     inputs: [],
     name: 'utilization',
     outputs: [{ name: '', internalType: 'uint16', type: 'uint16' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'utilizationTargetBPS',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
   {
     stateMutability: 'view',
