@@ -153,7 +153,7 @@ export class ChromaticLP {
 
   async clbTokenBalances(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.clbTokenIds({
+      return await this.contracts().lp(lpAddress).read.clbTokenBalances({
         account: this._client.publicClient?.account,
       });
     });
