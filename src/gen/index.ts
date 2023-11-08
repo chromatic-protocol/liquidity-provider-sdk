@@ -129,6 +129,7 @@ export const chromaticLpRegistryConfig = {
 
 export const iChromaticLpABI = [
   { type: 'error', inputs: [], name: 'AlreadyRebalanceTaskExist' },
+  { type: 'error', inputs: [], name: 'InvalidMinHoldingValueToRebalance' },
   { type: 'error', inputs: [], name: 'InvalidRebalanceBPS' },
   {
     type: 'error',
@@ -150,6 +151,7 @@ export const iChromaticLpABI = [
   { type: 'error', inputs: [], name: 'NotOwner' },
   { type: 'error', inputs: [], name: 'OnlyAccessableByOwner' },
   { type: 'error', inputs: [], name: 'OnlyBatchCall' },
+  { type: 'error', inputs: [], name: 'TooSmallAmountToAddLiquidity' },
   { type: 'error', inputs: [], name: 'UnknownLPAction' },
   {
     type: 'event',
@@ -240,6 +242,12 @@ export const iChromaticLpABI = [
   {
     type: 'event',
     anonymous: false,
+    inputs: [{ name: 'newValue', internalType: 'uint256', type: 'uint256', indexed: false }],
+    name: 'SetAutomationFeeReserved'
+  },
+  {
+    type: 'event',
+    anonymous: false,
     inputs: [{ name: 'name', internalType: 'string', type: 'string', indexed: false }],
     name: 'SetLpName'
   },
@@ -248,6 +256,12 @@ export const iChromaticLpABI = [
     anonymous: false,
     inputs: [{ name: 'tag', internalType: 'string', type: 'string', indexed: false }],
     name: 'SetLpTag'
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [{ name: 'newValue', internalType: 'uint256', type: 'uint256', indexed: false }],
+    name: 'SetMinHoldingValueToRebalance'
   },
   {
     stateMutability: 'nonpayable',
@@ -315,6 +329,20 @@ export const iChromaticLpABI = [
     inputs: [],
     name: 'distributionRates',
     outputs: [{ name: '', internalType: 'uint16[]', type: 'uint16[]' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'estimateMinAddLiquidityAmount',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'estimateMinRemoveLiquidityAmount',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
   {
     stateMutability: 'view',
@@ -393,6 +421,13 @@ export const iChromaticLpABI = [
     inputs: [],
     name: 'market',
     outputs: [{ name: '', internalType: 'address', type: 'address' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'minHoldingValueToRebalance',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
   {
     stateMutability: 'view',
@@ -493,6 +528,13 @@ export const iChromaticLpABI = [
     type: 'function',
     inputs: [{ name: 'newTag', internalType: 'string', type: 'string' }],
     name: 'setLpTag',
+    outputs: []
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [{ name: '_minHoldingValueToRebalance', internalType: 'uint256', type: 'uint256' }],
+    name: 'setMinHoldingValueToRebalance',
     outputs: []
   },
   {
