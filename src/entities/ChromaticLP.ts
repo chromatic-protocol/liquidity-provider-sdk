@@ -247,13 +247,20 @@ export class ChromaticLP {
       });
     });
   }
+  async estimateMinRemoveLiquidityAmount(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.estimateMinRemoveLiquidityAmount({
+        account: this._client.publicClient?.account,
+      });
+    });
+  }
   async minHoldingValueToRebalance(lpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.minHoldingValueToRebalance({
         account: this._client.publicClient?.account,
       });
     });
-  }  
+  }
   async transferFrom(
     lpAddress: Address,
     from: Address,
