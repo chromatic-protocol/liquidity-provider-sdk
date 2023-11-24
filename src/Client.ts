@@ -1,6 +1,5 @@
 import type { PublicClient, WalletClient } from "viem";
-import { ChromaticLP } from "./entities/ChromaticLP";
-import { ChromaticRegistry } from "./entities/ChromaticRegistry";
+import { ChromaticBP, ChromaticBPFactory, ChromaticLP, ChromaticRegistry } from "./entities";
 export class Client {
   public walletClient: WalletClient | undefined;
   public publicClient: PublicClient | undefined;
@@ -25,5 +24,12 @@ export class Client {
 
   lp(): ChromaticLP {
     return new ChromaticLP(this);
+  }
+
+  bpFactory(): ChromaticBPFactory {
+    return new ChromaticBPFactory(this);
+  }
+  bp(): ChromaticBP {
+    return new ChromaticBP(this);
   }
 }
