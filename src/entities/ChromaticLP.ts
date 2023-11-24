@@ -4,6 +4,23 @@ import { iChromaticLpABI, ierc20MetadataABI } from "../gen";
 import type { ContractChromaticLP, ContractIErc20Metadata } from "../types";
 import { MAX_UINT256, checkClient, handleBytesError } from "../utils/helpers";
 
+export const iChromaticMarketABI = [
+  {
+    stateMutability: "view",
+    type: "function",
+    inputs: [{ name: "ids", internalType: "uint256[]", type: "uint256[]" }],
+    name: "totalSupplyBatch",
+    outputs: [{ name: "", internalType: "uint256[]", type: "uint256[]" }],
+  },
+  {
+    stateMutability: "view",
+    type: "function",
+    inputs: [{ name: "tradingFeeRates", internalType: "int16[]", type: "int16[]" }],
+    name: "getBinValues",
+    outputs: [{ name: "values", internalType: "uint256[]", type: "uint256[]" }],
+  },
+] as const;
+
 export class ChromaticLP {
   constructor(private readonly _client: Client) {}
 
@@ -27,6 +44,13 @@ export class ChromaticLP {
         getContract({
           address: lpAddress,
           abi: ierc20MetadataABI,
+          publicClient: this._client.publicClient,
+          walletClient: this._client.walletClient,
+        }),
+      market: (marketAddress: Address) =>
+        getContract({
+          address: marketAddress,
+          abi: iChromaticMarketABI,
           publicClient: this._client.publicClient,
           walletClient: this._client.walletClient,
         }),
@@ -157,6 +181,19 @@ export class ChromaticLP {
         account: this._client.publicClient?.account,
       });
     });
+  }
+
+  async clbTokenValues(lpAddress: Address) {
+    const marketAddress = await this.marketOf(lpAddress);
+    const market = this.contracts().market(marketAddress);
+
+    const totalSupplies = await market.read.totalSupplyBatch([await this.clbTokenIds(lpAddress)]);
+    const binValues = await market.read.getBinValues([await this.feeRates(lpAddress)]);
+    const clbBalances = await this.clbTokenBalances(lpAddress);
+    const values = totalSupplies.map((x, i) =>
+      x == 0n ? 0n : (binValues[i] * clbBalances[i]) / x
+    );
+    return values;
   }
 
   async lpTokenMeta(lpAddress: Address) {
