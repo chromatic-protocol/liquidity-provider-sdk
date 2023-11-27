@@ -191,7 +191,7 @@ export class ChromaticLP {
     const binValues = await market.read.getBinValues([await this.feeRates(lpAddress)]);
     const clbBalances = await this.clbTokenBalances(lpAddress);
     const values = totalSupplies.map((x, i) =>
-      x == 0n ? 0n : (binValues[i] * clbBalances[i]) / x
+      x === 0n ? 0n : (binValues[i] * clbBalances[i]) / x
     );
     return values;
   }
