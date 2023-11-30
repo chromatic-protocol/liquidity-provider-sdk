@@ -8,16 +8,26 @@ export const iChromaticMarketABI = [
   {
     stateMutability: "view",
     type: "function",
-    inputs: [{ name: "ids", internalType: "uint256[]", type: "uint256[]" }],
-    name: "totalSupplyBatch",
-    outputs: [{ name: "", internalType: "uint256[]", type: "uint256[]" }],
+    inputs: [{ name: "tradingFeeRates", internalType: "int16[]", type: "int16[]" }],
+    name: "getBinValues",
+    outputs: [{ name: "values", internalType: "uint256[]", type: "uint256[]" }],
   },
   {
     stateMutability: "view",
     type: "function",
-    inputs: [{ name: "tradingFeeRates", internalType: "int16[]", type: "int16[]" }],
-    name: "getBinValues",
-    outputs: [{ name: "values", internalType: "uint256[]", type: "uint256[]" }],
+    inputs: [],
+    name: "clbToken",
+    outputs: [{ name: "", internalType: "contract ICLBToken", type: "address" }],
+  },
+] as const;
+
+export const clbTokenABI = [
+  {
+    stateMutability: "view",
+    type: "function",
+    inputs: [{ name: "ids", internalType: "uint256[]", type: "uint256[]" }],
+    name: "totalSupplyBatch",
+    outputs: [{ name: "", internalType: "uint256[]", type: "uint256[]" }],
   },
 ] as const;
 
@@ -54,6 +64,16 @@ export class ChromaticLP {
           publicClient: this._client.publicClient,
           walletClient: this._client.walletClient,
         }),
+      clbToken: async (marketAddress: Address) => {
+        const market = this.contracts().market(marketAddress);
+        const clbTokenAddress = await market.read.clbToken();
+        return getContract({
+          address: clbTokenAddress,
+          abi: clbTokenABI,
+          publicClient: this._client.publicClient,
+          walletClient: this._client.walletClient,
+        });
+      },
     };
   }
 
@@ -186,8 +206,8 @@ export class ChromaticLP {
   async clbTokenValues(lpAddress: Address) {
     const marketAddress = await this.marketOf(lpAddress);
     const market = this.contracts().market(marketAddress);
-
-    const totalSupplies = await market.read.totalSupplyBatch([await this.clbTokenIds(lpAddress)]);
+    const clbToken = await this.contracts().clbToken(marketAddress);
+    const totalSupplies = await clbToken.read.totalSupplyBatch([await this.clbTokenIds(lpAddress)]);
     const binValues = await market.read.getBinValues([await this.feeRates(lpAddress)]);
     const clbBalances = await this.clbTokenBalances(lpAddress);
     const values = totalSupplies.map((x, i) =>
