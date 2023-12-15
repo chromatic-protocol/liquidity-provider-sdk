@@ -4,6 +4,22 @@ import { iChromaticBpABI, ierc20MetadataABI } from "../gen";
 import type { ContractChromaticBP, ContractIErc20Metadata } from "../types";
 import { MAX_UINT256, checkClient, handleBytesError } from "../utils/helpers";
 
+export enum BPPeriod {
+  PREWARMUP,
+  WARMUP,
+  LOCKUP,
+  POSTLOCKUP,
+}
+
+export enum BPStatus {
+  UPCOMING,
+  DEPOSITABLE,
+  WAIT_BOOST,
+  WAIT_SETTLE,
+  LOCKUP,
+  CLAIMABLE,
+  REFUNDABLE,
+}
 export class ChromaticBP {
   constructor(private readonly _client: Client) {}
 
@@ -73,7 +89,7 @@ export class ChromaticBP {
     });
   }
 
-  async currentPeriod(bpAddress: Address) {
+  async currentPeriod(bpAddress: Address): Promise<BPPeriod> {
     return await handleBytesError(async () => {
       return await this.contracts().bp(bpAddress).read.currentPeriod();
     });
@@ -81,9 +97,7 @@ export class ChromaticBP {
 
   async isDepositable(bpAddress: Address): Promise<boolean> {
     return await handleBytesError(async () => {
-      return await this.contracts().bp(bpAddress).read.isDepositable({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().bp(bpAddress).read.isDepositable();
     });
   }
 
@@ -96,6 +110,18 @@ export class ChromaticBP {
   async isClaimable(bpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().bp(bpAddress).read.isClaimable();
+    });
+  }
+
+  async totalReward(bpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().bp(bpAddress).read.totalReward();
+    });
+  }
+
+  async status(bpAddress: Address): Promise<BPStatus> {
+    return await handleBytesError(async () => {
+      return await this.contracts().bp(bpAddress).read.status();
     });
   }
 
@@ -248,7 +274,7 @@ export class ChromaticBP {
     });
   }
 
-  async boostLP(bpAddress: Address) {
+  async boost(bpAddress: Address) {
     if (!this._client.walletClient) {
       throw new Error("Wallet Client is not set");
     }
@@ -257,7 +283,7 @@ export class ChromaticBP {
 
     return await handleBytesError(async () => {
       checkClient(this._client);
-      const { request } = await this.contracts().bp(bpAddress).simulate.boostLP({
+      const { request } = await this.contracts().bp(bpAddress).simulate.boost({
         account: account,
       });
 
@@ -266,10 +292,10 @@ export class ChromaticBP {
     });
   }
 
-  async resolveBoostLPTask(bpAddress: Address): Promise<boolean> {
+  async checkBoost(bpAddress: Address): Promise<boolean> {
     // for debugging
-    const [canExec] = await handleBytesError(async () => {
-      return await this.contracts().bp(bpAddress).read.resolveBoostLPTask({
+    const canExec = await handleBytesError(async () => {
+      return await this.contracts().bp(bpAddress).read.checkBoost({
         account: this._client.publicClient?.account,
       });
     });
