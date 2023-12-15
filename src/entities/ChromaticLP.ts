@@ -101,119 +101,86 @@ export class ChromaticLP {
   }
   async getReceiptIdsOf(lpAddress: Address, owner: Address): Promise<readonly bigint[]> {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.getReceiptIdsOf([owner], {
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.getReceiptIdsOf([owner]);
     });
   }
 
   async getReceipt(lpAddress: Address, receiptId: bigint) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.getReceipt([receiptId], {
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.getReceipt([receiptId]);
     });
   }
 
   async utilization(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.utilization({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.utilization();
     });
   }
 
   async totalValue(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.totalValue({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.totalValue();
     });
   }
 
   async valueInfo(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.valueInfo({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.valueInfo();
     });
   }
 
   async holdingValue(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.holdingValue({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.holdingValue();
     });
   }
 
   async pendingValue(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.pendingValue({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.pendingValue();
     });
   }
 
   async holdingClbValue(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.holdingClbValue({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.holdingClbValue();
     });
   }
 
   async pendingClbValue(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.pendingClbValue({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.pendingClbValue();
     });
   }
 
   async totalClbValue(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.totalClbValue({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.totalClbValue();
     });
   }
 
   async feeRates(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.feeRates({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.feeRates();
     });
   }
 
   async clbTokenIds(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.clbTokenIds({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.clbTokenIds();
     });
   }
 
   async clbTokenBalances(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.clbTokenBalances({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.clbTokenBalances();
     });
   }
 
   async clbTokenValues(lpAddress: Address) {
-    const marketAddress = await this.marketOf(lpAddress);
-    const market = this.contracts().market(marketAddress);
-    const clbToken = await this.contracts().clbToken(marketAddress);
-    const totalSupplies = await clbToken.read.totalSupplyBatch([await this.clbTokenIds(lpAddress)]);
-    const binValues = await market.read.getBinValues([await this.feeRates(lpAddress)]);
-    const clbBalances = await this.clbTokenBalances(lpAddress);
-    const values = totalSupplies.map((x, i) =>
-      x === 0n ? 0n : (binValues[i] * clbBalances[i]) / x
-    );
-    return values;
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.clbTokenValues();
+    });
   }
 
   async lpTokenMeta(lpAddress: Address) {
@@ -234,88 +201,64 @@ export class ChromaticLP {
 
   async totalSupply(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lpToken(lpAddress).read.totalSupply({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lpToken(lpAddress).read.totalSupply();
     });
   }
 
   async balanceOf(lpAddress: Address, account: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lpToken(lpAddress).read.balanceOf([account], {
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lpToken(lpAddress).read.balanceOf([account]);
     });
   }
 
   async allowance(lpAddress: Address, owner: Address, spender: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lpToken(lpAddress).read.allowance([owner, spender], {
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lpToken(lpAddress).read.allowance([owner, spender]);
     });
   }
   async automationFeeReserved(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.automationFeeReserved({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.automationFeeReserved();
     });
   }
   async distributionRates(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.distributionRates({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.distributionRates();
     });
   }
   async rebalanceBPS(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.rebalanceBPS({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.rebalanceBPS();
     });
   }
   async rebalanceCheckingInterval(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.rebalanceCheckingInterval({
-        account: this._client.publicClient?.account,
-      });
-    });
-  }
-  async settleCheckingInterval(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.settleCheckingInterval({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.rebalanceCheckingInterval();
     });
   }
   async utilizationTargetBPS(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.utilizationTargetBPS({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.utilizationTargetBPS();
     });
   }
   async estimateMinAddLiquidityAmount(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.estimateMinAddLiquidityAmount({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.estimateMinAddLiquidityAmount();
     });
   }
   async estimateMinRemoveLiquidityAmount(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.estimateMinRemoveLiquidityAmount({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.estimateMinRemoveLiquidityAmount();
     });
   }
   async minHoldingValueToRebalance(lpAddress: Address) {
     return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.minHoldingValueToRebalance({
-        account: this._client.publicClient?.account,
-      });
+      return await this.contracts().lp(lpAddress).read.minHoldingValueToRebalance();
+    });
+  }
+  async longShortInfo(lpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.longShortInfo();
     });
   }
   async transferFrom(
@@ -443,20 +386,20 @@ export class ChromaticLP {
     });
   }
 
-  async resolveSettle(lpAddress: Address, receiptId: bigint): Promise<boolean> {
+  async checkSettle(lpAddress: Address, receiptId: bigint): Promise<boolean> {
     // for debugging
-    const [canExec] = await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.resolveSettle([receiptId], {
+    const canExec = await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.checkSettle([receiptId], {
         account: this._client.publicClient?.account,
       });
     });
     return canExec;
   }
 
-  async resolveRebalance(lpAddress: Address): Promise<boolean> {
+  async checkRebalance(lpAddress: Address): Promise<boolean> {
     // for debugging
-    const [canExec] = await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.resolveRebalance({
+    const canExec = await handleBytesError(async () => {
+      return await this.contracts().lp(lpAddress).read.checkRebalance({
         account: this._client.publicClient?.account,
       });
     });
