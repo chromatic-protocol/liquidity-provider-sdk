@@ -1,7 +1,7 @@
 {
   "name": "@chromatic-protocol/liquidity-provider-sdk",
   "license": "MIT",
-  "version": "1.0.1-rc.38",
+  "version": "1.0.1-rc.39",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
