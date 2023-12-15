@@ -3,10 +3,14 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x47Ff886d8406B1b4F3371F5aa3b64A72954B9d94)
+ *
  */
 export const chromaticBpFactoryABI = [
-  { stateMutability: 'nonpayable', type: 'constructor', inputs: [] },
+  {
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+    inputs: [{ name: 'automate', internalType: 'contract IAutomateBP', type: 'address' }]
+  },
   { type: 'error', inputs: [], name: 'OnlyAccessableByOwner' },
   {
     type: 'event',
@@ -25,6 +29,12 @@ export const chromaticBpFactoryABI = [
       { name: 'newOwner', internalType: 'address', type: 'address', indexed: true }
     ],
     name: 'OwnershipTransferred'
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [{ name: 'automateBP', internalType: 'address', type: 'address', indexed: false }],
+    name: 'SetAutomateBP'
   },
   {
     stateMutability: 'view',
@@ -50,25 +60,24 @@ export const chromaticBpFactoryABI = [
         type: 'tuple',
         components: [
           { name: 'lp', internalType: 'contract IChromaticLP', type: 'address' },
+          { name: 'totalReward', internalType: 'uint256', type: 'uint256' },
           { name: 'minRaisingTarget', internalType: 'uint256', type: 'uint256' },
           { name: 'maxRaisingTarget', internalType: 'uint256', type: 'uint256' },
           { name: 'startTimeOfWarmup', internalType: 'uint256', type: 'uint256' },
-          { name: 'durationOfWarmup', internalType: 'uint256', type: 'uint256' },
+          { name: 'maxDurationOfWarmup', internalType: 'uint256', type: 'uint256' },
           { name: 'durationOfLockup', internalType: 'uint256', type: 'uint256' }
-        ]
-      },
-      {
-        name: 'automateParam',
-        internalType: 'struct AutomateParam',
-        type: 'tuple',
-        components: [
-          { name: 'automate', internalType: 'address', type: 'address' },
-          { name: 'opsProxyFactory', internalType: 'address', type: 'address' }
         ]
       }
     ],
     name: 'createBP',
     outputs: []
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'getAutomateBP',
+    outputs: [{ name: 'automate', internalType: 'contract IAutomateBP', type: 'address' }]
   },
   {
     stateMutability: 'view',
@@ -87,6 +96,13 @@ export const chromaticBpFactoryABI = [
   {
     stateMutability: 'nonpayable',
     type: 'function',
+    inputs: [{ name: 'automate', internalType: 'contract IAutomateBP', type: 'address' }],
+    name: 'setAutomateBP',
+    outputs: []
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
     inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
     name: 'transferOwnership',
     outputs: []
@@ -94,14 +110,14 @@ export const chromaticBpFactoryABI = [
 ] as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x47Ff886d8406B1b4F3371F5aa3b64A72954B9d94)
+ *
  */
 export const chromaticBpFactoryAddress = {
-  421613: '0x47Ff886d8406B1b4F3371F5aa3b64A72954B9d94'
+  421614: '0x482736De288D1c5B53c86A821cAf90268a58cB81'
 } as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x47Ff886d8406B1b4F3371F5aa3b64A72954B9d94)
+ *
  */
 export const chromaticBpFactoryConfig = {
   address: chromaticBpFactoryAddress,
@@ -113,7 +129,7 @@ export const chromaticBpFactoryConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x84c03Ce4D9F3cb63FDb896cF28EfCd2C8FB0e97D)
+ *
  */
 export const chromaticLpRegistryABI = [
   {
@@ -219,14 +235,14 @@ export const chromaticLpRegistryABI = [
 ] as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x84c03Ce4D9F3cb63FDb896cF28EfCd2C8FB0e97D)
+ *
  */
 export const chromaticLpRegistryAddress = {
-  421613: '0x84c03Ce4D9F3cb63FDb896cF28EfCd2C8FB0e97D'
+  421614: '0x8C3FA15fdCb5F87483De80CffFAA2b96928e75b1'
 } as const
 
 /**
- * [__View Contract on Arbitrum Goerli Arbiscan__](https://goerli.arbiscan.io//address/0x84c03Ce4D9F3cb63FDb896cF28EfCd2C8FB0e97D)
+ *
  */
 export const chromaticLpRegistryConfig = {
   address: chromaticLpRegistryAddress,
@@ -246,7 +262,10 @@ export const iChromaticBpABI = [
   { type: 'error', inputs: [], name: 'InvalidLockup' },
   { type: 'error', inputs: [], name: 'InvalidRaisingTarget' },
   { type: 'error', inputs: [], name: 'InvalidWarmup' },
+  { type: 'error', inputs: [], name: 'NonTransferable' },
   { type: 'error', inputs: [], name: 'NotAutomationCalled' },
+  { type: 'error', inputs: [], name: 'NotBoostable' },
+  { type: 'error', inputs: [], name: 'NotLPCalled' },
   { type: 'error', inputs: [], name: 'NotRefundablePeriod' },
   { type: 'error', inputs: [], name: 'NotWarmupPeriod' },
   { type: 'error', inputs: [], name: 'RefundError' },
@@ -264,6 +283,8 @@ export const iChromaticBpABI = [
     ],
     name: 'Approval'
   },
+  { type: 'event', anonymous: false, inputs: [], name: 'BPBoostTaskCreated' },
+  { type: 'event', anonymous: false, inputs: [], name: 'BPBoostTaskExecuted' },
   {
     type: 'event',
     anonymous: false,
@@ -283,7 +304,12 @@ export const iChromaticBpABI = [
     ],
     name: 'BPDeposited'
   },
-  { type: 'event', anonymous: false, inputs: [], name: 'BPExecuted' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [{ name: 'totalRaised', internalType: 'uint256', type: 'uint256', indexed: false }],
+    name: 'BPFullyRaised'
+  },
   {
     type: 'event',
     anonymous: false,
@@ -298,6 +324,12 @@ export const iChromaticBpABI = [
     anonymous: false,
     inputs: [{ name: 'totalLPToken', internalType: 'uint256', type: 'uint256', indexed: false }],
     name: 'BPSettleUpdated'
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [{ name: 'totalReward', internalType: 'uint256', type: 'uint256', indexed: false }],
+    name: 'SetTotalReward'
   },
   {
     type: 'event',
@@ -336,8 +368,24 @@ export const iChromaticBpABI = [
     name: 'balanceOf',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
-  { stateMutability: 'nonpayable', type: 'function', inputs: [], name: 'boostLP', outputs: [] },
-  { stateMutability: 'nonpayable', type: 'function', inputs: [], name: 'boostLPTask', outputs: [] },
+  { stateMutability: 'nonpayable', type: 'function', inputs: [], name: 'boost', outputs: [] },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'feePayee', internalType: 'address', type: 'address' },
+      { name: 'keeperFee', internalType: 'uint256', type: 'uint256' }
+    ],
+    name: 'boostTask',
+    outputs: []
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'checkBoost',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }]
+  },
   {
     stateMutability: 'nonpayable',
     type: 'function',
@@ -427,16 +475,6 @@ export const iChromaticBpABI = [
     stateMutability: 'view',
     type: 'function',
     inputs: [],
-    name: 'resolveBoostLPTask',
-    outputs: [
-      { name: 'upkeepNeeded', internalType: 'bool', type: 'bool' },
-      { name: 'performData', internalType: 'bytes', type: 'bytes' }
-    ]
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
     name: 'settlementToken',
     outputs: [{ name: 'token', internalType: 'contract IERC20', type: 'address' }]
   },
@@ -446,6 +484,13 @@ export const iChromaticBpABI = [
     inputs: [],
     name: 'startTimeOfWarmup',
     outputs: [{ name: 'timestamp', internalType: 'uint256', type: 'uint256' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'status',
+    outputs: [{ name: '', internalType: 'enum BPStatus', type: 'uint8' }]
   },
   {
     stateMutability: 'view',
@@ -467,6 +512,13 @@ export const iChromaticBpABI = [
     inputs: [],
     name: 'totalRaised',
     outputs: [{ name: 'amount', internalType: 'uint256', type: 'uint256' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'totalReward',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
   {
     stateMutability: 'view',
@@ -503,7 +555,6 @@ export const iChromaticBpABI = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const iChromaticLpABI = [
-  { type: 'error', inputs: [], name: 'AlreadyRebalanceTaskExist' },
   { type: 'error', inputs: [], name: 'InvalidMinHoldingValueToRebalance' },
   { type: 'error', inputs: [], name: 'InvalidRebalanceBPS' },
   {
@@ -617,6 +668,12 @@ export const iChromaticLpABI = [
   {
     type: 'event',
     anonymous: false,
+    inputs: [{ name: 'automate', internalType: 'address', type: 'address', indexed: false }],
+    name: 'SetAutomateLP'
+  },
+  {
+    type: 'event',
+    anonymous: false,
     inputs: [{ name: 'newValue', internalType: 'uint256', type: 'uint256', indexed: false }],
     name: 'SetAutomationFeeReserved'
   },
@@ -678,6 +735,27 @@ export const iChromaticLpABI = [
     outputs: []
   },
   {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [{ name: 'receiptId', internalType: 'uint256', type: 'uint256' }],
+    name: 'cancelSettleTask',
+    outputs: []
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'checkRebalance',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'receiptId', internalType: 'uint256', type: 'uint256' }],
+    name: 'checkSettle',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }]
+  },
+  {
     stateMutability: 'view',
     type: 'function',
     inputs: [],
@@ -690,6 +768,13 @@ export const iChromaticLpABI = [
     inputs: [],
     name: 'clbTokenIds',
     outputs: [{ name: 'tokenIds', internalType: 'uint256[]', type: 'uint256[]' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'clbTokenValues',
+    outputs: [{ name: 'values', internalType: 'uint256[]', type: 'uint256[]' }]
   },
   {
     stateMutability: 'nonpayable',
@@ -725,6 +810,13 @@ export const iChromaticLpABI = [
     inputs: [],
     name: 'feeRates',
     outputs: [{ name: '', internalType: 'int16[]', type: 'int16[]' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'getAutomateLP',
+    outputs: [{ name: '', internalType: 'contract IAutomateLP', type: 'address' }]
   },
   {
     stateMutability: 'view',
@@ -768,6 +860,13 @@ export const iChromaticLpABI = [
     inputs: [],
     name: 'holdingValue',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'longShortInfo',
+    outputs: [{ name: '', internalType: 'int8', type: 'int8' }]
   },
   {
     stateMutability: 'view',
@@ -826,6 +925,16 @@ export const iChromaticLpABI = [
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
   {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'feePayee', internalType: 'address', type: 'address' },
+      { name: 'keeperFee', internalType: 'uint256', type: 'uint256' }
+    ],
+    name: 'rebalance',
+    outputs: []
+  },
+  {
     stateMutability: 'view',
     type: 'function',
     inputs: [],
@@ -865,24 +974,11 @@ export const iChromaticLpABI = [
     ]
   },
   {
-    stateMutability: 'view',
+    stateMutability: 'nonpayable',
     type: 'function',
-    inputs: [],
-    name: 'resolveRebalance',
-    outputs: [
-      { name: 'upkeepNeeded', internalType: 'bool', type: 'bool' },
-      { name: 'performData', internalType: 'bytes', type: 'bytes' }
-    ]
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'receiptId', internalType: 'uint256', type: 'uint256' }],
-    name: 'resolveSettle',
-    outputs: [
-      { name: 'upkeepNeeded', internalType: 'bool', type: 'bool' },
-      { name: 'performData', internalType: 'bytes', type: 'bytes' }
-    ]
+    inputs: [{ name: 'automate', internalType: 'contract IAutomateLP', type: 'address' }],
+    name: 'setAutomateLP',
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
@@ -920,11 +1016,15 @@ export const iChromaticLpABI = [
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }]
   },
   {
-    stateMutability: 'view',
+    stateMutability: 'nonpayable',
     type: 'function',
-    inputs: [],
-    name: 'settleCheckingInterval',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
+    inputs: [
+      { name: 'receiptId', internalType: 'uint256', type: 'uint256' },
+      { name: 'feePayee', internalType: 'address', type: 'address' },
+      { name: 'keeperFee', internalType: 'uint256', type: 'uint256' }
+    ],
+    name: 'settleTask',
+    outputs: []
   },
   {
     stateMutability: 'view',
