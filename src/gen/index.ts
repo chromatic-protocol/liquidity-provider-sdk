@@ -113,7 +113,7 @@ export const chromaticBpFactoryABI = [
  *
  */
 export const chromaticBpFactoryAddress = {
-  421614: '0x482736De288D1c5B53c86A821cAf90268a58cB81'
+  421614: '0x240b2cCCa39490e7bEf273576F5e1d7765B04e08'
 } as const
 
 /**
@@ -238,7 +238,7 @@ export const chromaticLpRegistryABI = [
  *
  */
 export const chromaticLpRegistryAddress = {
-  421614: '0x8C3FA15fdCb5F87483De80CffFAA2b96928e75b1'
+  421614: '0x29DE8C031D36a34C95Ba6D3ce82c9ABE0EA737F5'
 } as const
 
 /**
