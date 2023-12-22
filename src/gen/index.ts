@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- *
+ * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x3bc679C0c267E14eB0A6FD73EFF8F9A64fDa6696)
  */
 export const chromaticBpFactoryABI = [
   {
@@ -110,14 +110,14 @@ export const chromaticBpFactoryABI = [
 ] as const
 
 /**
- *
+ * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x3bc679C0c267E14eB0A6FD73EFF8F9A64fDa6696)
  */
 export const chromaticBpFactoryAddress = {
   421614: '0x3bc679C0c267E14eB0A6FD73EFF8F9A64fDa6696'
 } as const
 
 /**
- *
+ * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x3bc679C0c267E14eB0A6FD73EFF8F9A64fDa6696)
  */
 export const chromaticBpFactoryConfig = {
   address: chromaticBpFactoryAddress,
@@ -129,7 +129,7 @@ export const chromaticBpFactoryConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- *
+ * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x7B3D2b62e50f34016818885accf36797124C9699)
  */
 export const chromaticLpRegistryABI = [
   {
@@ -235,14 +235,14 @@ export const chromaticLpRegistryABI = [
 ] as const
 
 /**
- *
+ * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x7B3D2b62e50f34016818885accf36797124C9699)
  */
 export const chromaticLpRegistryAddress = {
   421614: '0x7B3D2b62e50f34016818885accf36797124C9699'
 } as const
 
 /**
- *
+ * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x7B3D2b62e50f34016818885accf36797124C9699)
  */
 export const chromaticLpRegistryConfig = {
   address: chromaticLpRegistryAddress,
