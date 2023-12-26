@@ -3,9 +3,7 @@ import { GraphQLClient, RequestMiddleware, Variables } from "graphql-request";
 import * as ChromaticBPFactory from "./sdk/ChromaticBPFactory";
 import * as ChromaticLP from "./sdk/ChromaticLP";
 import * as ChromaticRegistry from "./sdk/ChromaticRegistry";
-
-export const SUBGRAPH_API_URL =
-  "https://graph-arbitrum-sepolia.api.chromatic.finance/subgraphs/name";
+import { SUBGRAPH_API_URL } from "../../../codegen/config";
 
 type UrlMap = {
   operations: string[];

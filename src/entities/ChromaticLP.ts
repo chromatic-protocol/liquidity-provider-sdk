@@ -78,26 +78,6 @@ export class ChromaticLP {
     };
   }
 
-  async getLpMeta(lpAddress: Address): Promise<LpMeta> {
-    const result = await lpGraphSdk.LPMeta({ lpAddress });
-    if (result.chromaticLPMetas.length < 1) {
-      throw Error("invalid lpAddress");
-    }
-    return result.chromaticLPMetas[0];
-  }
-
-  async getLpConfig(lpAddress: Address): Promise<LpConfig> {
-    const result = await lpGraphSdk.LPConfig({ lpAddress });
-    if (result.chromaticLPConfigs.length < 1) {
-      throw Error("invalid lpAddress");
-    }
-    const config = result.chromaticLPConfigs[0];
-    return {
-      minHoldingValueToRebalance: BigInt(config.minHoldingValueToRebalance),
-      automationFeeReserved: BigInt(config.automationFeeReserved),
-    };
-  }
-
   async getLpStat(lpAddress: Address): Promise<LpStat> {
     const result = await lpGraphSdk.LPStat({ lpAddress });
     if (result.chromaticLPStats.length < 1) {
@@ -120,12 +100,20 @@ export class ChromaticLP {
       throw Error("invalid lpAddress");
     }
     const lpInfo = result.chromaticLP;
+    if (lpInfo.configs.length < 1 || lpInfo.metas.length < 1) {
+      throw Error("invalid lpAddress");
+    }
+
     return {
       ...lpInfo,
       rebalanceBPS: BigInt(lpInfo.rebalanceBPS),
       rebalanceCheckingInterval: BigInt(lpInfo.rebalanceCheckingInterval),
       utilizationTargetBPS: BigInt(lpInfo.utilizationTargetBPS),
       clbTokenIds: lpInfo.clbTokenIds.map((e) => BigInt(e)),
+      lpName: lpInfo.metas[0].lpName,
+      lpTag: lpInfo.metas[0].lpTag,
+      minHoldingValueToRebalance: BigInt(lpInfo.configs[0].minHoldingValueToRebalance),
+      automationFeeReserved: BigInt(lpInfo.configs[0].automationFeeReserved),
     };
   }
 
@@ -194,11 +182,11 @@ export class ChromaticLP {
   }
 
   async estimateMinAddLiquidityAmount(lpAddress: Address) {
-    const result = await lpGraphSdk.EstimateMinAddLiquidityAmount({ lpId: lpAddress, lpAddress });
-    if (result.chromaticLPConfigs.length < 1 || !result.chromaticLP) {
+    const result = await lpGraphSdk.EstimateMinAddLiquidityAmount({ lpAddress });
+    if (!result.chromaticLP || result.chromaticLP.configs.length < 1) {
       throw Error("invalid lpAddress");
     }
-    const automationFeeReserved = BigInt(result.chromaticLPConfigs[0].automationFeeReserved);
+    const automationFeeReserved = BigInt(result.chromaticLP.configs[0].automationFeeReserved);
     const utilizationTargetBPS = BigInt(result.chromaticLP!.utilizationTargetBPS);
 
     // s_config.automationFeeReserved +
@@ -373,25 +361,6 @@ export class ChromaticLP {
   }
 }
 
-export type LpMeta = {
-  lpName: string;
-  lpTag: string;
-};
-
-export type LpConfig = {
-  minHoldingValueToRebalance: bigint;
-  automationFeeReserved: bigint;
-};
-
-export type LpStat = {
-  pendingClbValue: bigint;
-  pendingValue: bigint;
-  totalValue: bigint;
-  utilization: number;
-  holdingValue: bigint;
-  holdingClbValue: bigint;
-};
-
 export type LpInfo = {
   longShortInfo: number;
   lpTokenDecimals: number;
@@ -409,6 +378,19 @@ export type LpInfo = {
   clbTokenIds: Array<bigint>;
   distributionRates: Array<number>;
   feeRates: Array<number>;
+  lpName: string;
+  lpTag: string;
+  minHoldingValueToRebalance: bigint;
+  automationFeeReserved: bigint;
+};
+
+export type LpStat = {
+  pendingClbValue: bigint;
+  pendingValue: bigint;
+  totalValue: bigint;
+  utilization: number;
+  holdingValue: bigint;
+  holdingClbValue: bigint;
 };
 
 export type LpReceipt = {

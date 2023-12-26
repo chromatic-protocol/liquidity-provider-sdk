@@ -37,7 +37,7 @@
     "build": "yarn build:cjs && yarn build:esm",
     "clean": "rm -rf dist",
     "pub": "yarn publish --access public",
-    "codegen": "graphql-codegen --config codegen/config/index.ts",
+    "codegen": "rm -rf ./src/lib/graphql/sdk && graphql-codegen --config codegen/config/index.ts",
     "test": "jest --runInBand"
   },
   "repository": {
@@ -46,12 +46,9 @@
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.0",
-    "@graphql-codegen/client-preset": "4.1.0",
-    "@graphql-codegen/introspection": "4.0.0",
     "@graphql-codegen/typescript": "^4.0.1",
-    "@graphql-codegen/typescript-graphql-request": "6.0.1",
+    "@graphql-codegen/typescript-graphql-request": "^6.1.0",
     "@graphql-codegen/typescript-operations": "^4.0.1",
-    "@graphql-typed-document-node/core": "^3.2.0",
     "@types/graphql": "^14.5.0",
     "@types/debug": "^4.1.8",
     "@types/jest": "^29.5.2",
