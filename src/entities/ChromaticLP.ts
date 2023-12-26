@@ -3,6 +3,7 @@ import { Client } from "../Client";
 import { iChromaticLpABI, ierc20MetadataABI } from "../gen";
 import type { ContractChromaticLP, ContractIErc20Metadata } from "../types";
 import { MAX_UINT256, checkClient, handleBytesError } from "../utils/helpers";
+import { lpGraphSdk } from "../lib/graphql";
 
 export const iChromaticMarketABI = [
   {
@@ -89,20 +90,75 @@ export class ChromaticLP {
     });
   }
 
-  async getLpName(lpAddress: Address): Promise<string> {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.lpName();
-    });
+  async getLpMeta(lpAddress: Address): Promise<LpMeta> {
+    const result = await lpGraphSdk.LPMeta({ lpAddress });
+    if (result.chromaticLPMetas.length < 1) {
+      throw Error("invalid lpAddress");
+    }
+    return result.chromaticLPMetas[0];
   }
-  async getLpTag(lpAddress: Address): Promise<string> {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.lpTag();
-    });
+
+  async getLpConfig(lpAddress: Address): Promise<LpConfig> {
+    const result = await lpGraphSdk.LPConfig({ lpAddress });
+    if (result.chromaticLPConfigs.length < 1) {
+      throw Error("invalid lpAddress");
+    }
+    const config = result.chromaticLPConfigs[0];
+    return {
+      minHoldingValueToRebalance: BigInt(config.minHoldingValueToRebalance),
+      automationFeeReserved: BigInt(config.automationFeeReserved),
+    };
   }
-  async getReceiptIdsOf(lpAddress: Address, owner: Address): Promise<readonly bigint[]> {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.getReceiptIdsOf([owner]);
-    });
+
+  async getLpStat(lpAddress: Address): Promise<LpStat> {
+    const result = await lpGraphSdk.LPStat({ lpAddress });
+    if (result.chromaticLPStats.length < 1) {
+      throw Error("invalid lpAddress");
+    }
+    const lpStat = result.chromaticLPStats[0];
+    return {
+      ...lpStat,
+      pendingClbValue: BigInt(lpStat.pendingClbValue),
+      pendingValue: BigInt(lpStat.pendingValue),
+      totalValue: BigInt(lpStat.totalValue),
+      holdingValue: BigInt(lpStat.holdingValue),
+      holdingClbValue: BigInt(lpStat.holdingClbValue),
+    };
+  }
+
+  async getLpInfo(lpAddress: Address): Promise<LpInfo> {
+    const result = await lpGraphSdk.LP({ lpAddress });
+    if (!result.chromaticLP) {
+      throw Error("invalid lpAddress");
+    }
+    const lpInfo = result.chromaticLP;
+    return {
+      ...lpInfo,
+      rebalanceBPS: BigInt(lpInfo.rebalanceBPS),
+      rebalanceCheckingInterval: BigInt(lpInfo.rebalanceCheckingInterval),
+      utilizationTargetBPS: BigInt(lpInfo.utilizationTargetBPS),
+      clbTokenIds: lpInfo.clbTokenIds.map((e) => BigInt(e)),
+    };
+  }
+
+  async getReceiptsOf(lpAddress: Address, owner: Address): Promise<LpReceipt[]> {
+    const result = await lpGraphSdk.GetReceiptsOf({ lpAddress, owner });
+    const addLiquidityReceipts: LpReceipt[] = result.addLiquidities.map((e) => ({
+      receiptType: "ADD",
+      ...e,
+      receiptId: BigInt(e.receiptId),
+      oracleVersion: BigInt(e.oracleVersion),
+      amount: BigInt(e.amount),
+    }));
+    const removeLiquidityReceipts: LpReceipt[] = result.removeLiquidities.map((e) => ({
+      receiptType: "REMOVE",
+      ...e,
+      receiptId: BigInt(e.receiptId),
+      oracleVersion: BigInt(e.oracleVersion),
+      amount: BigInt(e.lpTokenAmount),
+    }));
+    const receipts: LpReceipt[] = [...addLiquidityReceipts, ...removeLiquidityReceipts];
+    return receipts.sort((a, b) => Number(b.receiptId - a.receiptId)); // DESC
   }
 
   async getReceipt(lpAddress: Address, receiptId: bigint) {
@@ -111,63 +167,9 @@ export class ChromaticLP {
     });
   }
 
-  async utilization(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.utilization();
-    });
-  }
-
-  async totalValue(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.totalValue();
-    });
-  }
-
-  async valueInfo(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.valueInfo();
-    });
-  }
-
-  async holdingValue(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.holdingValue();
-    });
-  }
-
-  async pendingValue(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.pendingValue();
-    });
-  }
-
-  async holdingClbValue(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.holdingClbValue();
-    });
-  }
-
-  async pendingClbValue(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.pendingClbValue();
-    });
-  }
-
   async totalClbValue(lpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.totalClbValue();
-    });
-  }
-
-  async feeRates(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.feeRates();
-    });
-  }
-
-  async clbTokenIds(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.clbTokenIds();
     });
   }
 
@@ -180,22 +182,6 @@ export class ChromaticLP {
   async clbTokenValues(lpAddress: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.clbTokenValues();
-    });
-  }
-
-  async lpTokenMeta(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      const lpContract = await this.contracts().lpToken(lpAddress);
-      const [name, symbol, decimals] = await Promise.all([
-        lpContract.read.name(),
-        lpContract.read.symbol(),
-        lpContract.read.decimals(),
-      ]);
-      return {
-        name,
-        symbol,
-        decimals,
-      };
     });
   }
 
@@ -216,51 +202,29 @@ export class ChromaticLP {
       return await this.contracts().lpToken(lpAddress).read.allowance([owner, spender]);
     });
   }
-  async automationFeeReserved(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.automationFeeReserved();
-    });
-  }
-  async distributionRates(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.distributionRates();
-    });
-  }
-  async rebalanceBPS(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.rebalanceBPS();
-    });
-  }
-  async rebalanceCheckingInterval(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.rebalanceCheckingInterval();
-    });
-  }
-  async utilizationTargetBPS(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.utilizationTargetBPS();
-    });
-  }
+
   async estimateMinAddLiquidityAmount(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.estimateMinAddLiquidityAmount();
-    });
+    const result = await lpGraphSdk.EstimateMinAddLiquidityAmount({ lpId: lpAddress, lpAddress });
+    if (result.chromaticLPConfigs.length < 1 || !result.chromaticLP) {
+      throw Error("invalid lpAddress");
+    }
+    const automationFeeReserved = BigInt(result.chromaticLPConfigs[0].automationFeeReserved);
+    const utilizationTargetBPS = BigInt(result.chromaticLP!.utilizationTargetBPS);
+
+    // s_config.automationFeeReserved +
+    //         s_config.automationFeeReserved.mulDiv(BPS, BPS - s_config.utilizationTargetBPS);
+    return (
+      automationFeeReserved + (automationFeeReserved * 10000n) / (10000n - utilizationTargetBPS)
+    );
   }
   async estimateMinRemoveLiquidityAmount(lpAddress: Address) {
+    const automationFeeReserved = await this.getLpConfig(lpAddress);
+    // return s_config.automationFeeReserved.mulDiv(totalSupply(), holdingValue());
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.estimateMinRemoveLiquidityAmount();
     });
   }
-  async minHoldingValueToRebalance(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.minHoldingValueToRebalance();
-    });
-  }
-  async longShortInfo(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.longShortInfo();
-    });
-  }
+
   async transferFrom(
     lpAddress: Address,
     from: Address,
@@ -406,3 +370,50 @@ export class ChromaticLP {
     return canExec;
   }
 }
+
+export type LpMeta = {
+  lpName: string;
+  lpTag: string;
+};
+
+export type LpConfig = {
+  minHoldingValueToRebalance: bigint;
+  automationFeeReserved: bigint;
+};
+
+export type LpStat = {
+  pendingClbValue: bigint;
+  pendingValue: bigint;
+  totalValue: bigint;
+  utilization: number;
+  holdingValue: bigint;
+  holdingClbValue: bigint;
+};
+
+export type LpInfo = {
+  longShortInfo: number;
+  lpTokenDecimals: number;
+  lpTokenSymbol: string;
+  lpTokenName: string;
+  market: Address;
+  oracleDescription: string;
+  oracleProvider: Address;
+  rebalanceBPS: bigint;
+  rebalanceCheckingInterval: bigint;
+  settlementTokenDecimals: number;
+  settlementToken: Address;
+  settlementTokenSymbol: string;
+  utilizationTargetBPS: bigint;
+  clbTokenIds: Array<bigint>;
+  distributionRates: Array<number>;
+  feeRates: Array<number>;
+};
+
+export type LpReceipt = {
+  receiptType: string;
+  receiptId: bigint;
+  provider: Address;
+  recipient: Address;
+  oracleVersion: bigint;
+  amount: bigint;
+};

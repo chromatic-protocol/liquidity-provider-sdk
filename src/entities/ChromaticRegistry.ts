@@ -2,7 +2,7 @@ import { Address, getContract } from "viem";
 import { Client } from "../Client";
 import { chromaticLpRegistryABI, chromaticLpRegistryAddress } from "../gen";
 import type { ContractChromaticLPRegistry } from "../types";
-import { handleBytesError } from "../utils/helpers";
+import { registryGraphSdk } from "../lib/graphql";
 
 export class ChromaticRegistry {
   constructor(private readonly _client: Client) {}
@@ -27,27 +27,17 @@ export class ChromaticRegistry {
   }
 
   async lpList(): Promise<readonly Address[]> {
-    return await handleBytesError(async () => {
-      return await this.contracts().registry.read.lpList({
-        account: this._client.publicClient?.account,
-      });
-    });
+    const result = await registryGraphSdk.LpList();
+    return result.chromaticLPs.map((e) => e.id);
   }
   async lpListByMarket(marketAddress: Address): Promise<readonly Address[]> {
-    return await handleBytesError(async () => {
-      return await this.contracts().registry.read.lpListByMarket([marketAddress], {
-        account: this._client.publicClient?.account,
-      });
-    });
+    const result = await registryGraphSdk.LpListByMarket({ market: marketAddress });
+    return result.chromaticLPs.map((e) => e.id);
   }
   async lpListBySettlementToken(settlementTokenAddress: Address): Promise<readonly Address[]> {
-    return await handleBytesError(async () => {
-      return await this.contracts().registry.read.lpListBySettlementToken(
-        [settlementTokenAddress],
-        {
-          account: this._client.publicClient?.account,
-        }
-      );
+    const result = await registryGraphSdk.LpListBySettlementToken({
+      settlementToken: settlementTokenAddress,
     });
+    return result.chromaticLPs.map((e) => e.id);
   }
 }

@@ -37,6 +37,7 @@
     "build": "yarn build:cjs && yarn build:esm",
     "clean": "rm -rf dist",
     "pub": "yarn publish --access public",
+    "codegen": "graphql-codegen --config codegen/config/index.ts",
     "test": "jest --runInBand"
   },
   "repository": {
@@ -44,6 +45,14 @@
     "url": "git+https://github.com/chromatic-protocol/liquidity-provider-sdk.git"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "4.1.0",
+    "@graphql-codegen/introspection": "4.0.0",
+    "@graphql-codegen/typescript": "^4.0.1",
+    "@graphql-codegen/typescript-graphql-request": "6.0.1",
+    "@graphql-codegen/typescript-operations": "^4.0.1",
+    "@graphql-typed-document-node/core": "^3.2.0",
+    "@types/graphql": "^14.5.0",
     "@types/debug": "^4.1.8",
     "@types/jest": "^29.5.2",
     "@types/lodash": "^4.14.196",
@@ -52,6 +61,8 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "graphql": "^16.8.1",
+    "graphql-request": "^6.1.0",
     "viem": "^1.5.0"
   }
 }

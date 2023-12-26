@@ -2,7 +2,7 @@ import { Address, getContract } from "viem";
 import { Client } from "../Client";
 import { chromaticBpFactoryABI, chromaticBpFactoryAddress } from "../gen";
 import type { ContractChromaticBPFactory } from "../types";
-import { handleBytesError } from "../utils/helpers";
+import { bpFactoryGraphSdk } from "../lib/graphql";
 
 export class ChromaticBPFactory {
   constructor(private readonly _client: Client) {}
@@ -27,17 +27,11 @@ export class ChromaticBPFactory {
   }
 
   async bpList(): Promise<readonly Address[]> {
-    return await handleBytesError(async () => {
-      return await this.contracts().factory.read.bpList({
-        account: this._client.publicClient?.account,
-      });
-    });
+    const result = await bpFactoryGraphSdk.BpList();
+    return result.chromaticBPCreateds.map((e) => e.bp);
   }
-  async bpListByLP(marketAddress: Address): Promise<readonly Address[]> {
-    return await handleBytesError(async () => {
-      return await this.contracts().factory.read.bpListByLP([marketAddress], {
-        account: this._client.publicClient?.account,
-      });
-    });
+  async bpListByLP(lpAddress: Address): Promise<readonly Address[]> {
+    const result = await bpFactoryGraphSdk.BpListByLp({ lp: lpAddress });
+    return result.chromaticBPCreateds.map((e) => e.bp);
   }
 }
