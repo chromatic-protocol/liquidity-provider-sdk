@@ -2521,6 +2521,20 @@ export type EstimateMinAddLiquidityAmountQueryVariables = Exact<{
 
 export type EstimateMinAddLiquidityAmountQuery = { __typename?: 'Query', chromaticLP?: { __typename?: 'ChromaticLP', utilizationTargetBPS: string } | null, chromaticLPConfigs: Array<{ __typename?: 'ChromaticLPConfig', automationFeeReserved: string }> };
 
+export type EstimateMinRemoveLiquidityAmountQueryVariables = Exact<{
+  lpAddress: Scalars['Bytes']['input'];
+}>;
+
+
+export type EstimateMinRemoveLiquidityAmountQuery = { __typename?: 'Query', chromaticLPConfigs: Array<{ __typename?: 'ChromaticLPConfig', automationFeeReserved: string }>, lptokenTotalSupplies: Array<{ __typename?: 'LPTokenTotalSupply', amount: string }>, chromaticLPStats: Array<{ __typename?: 'ChromaticLPStat', holdingValue: string }> };
+
+export type LpTotalSupplyQueryVariables = Exact<{
+  lpAddress: Scalars['Bytes']['input'];
+}>;
+
+
+export type LpTotalSupplyQuery = { __typename?: 'Query', lptokenTotalSupplies: Array<{ __typename?: 'LPTokenTotalSupply', amount: string }> };
+
 
 export const LpDocument = gql`
     query LP($lpAddress: ID!) {
@@ -2621,6 +2635,46 @@ export const EstimateMinAddLiquidityAmountDocument = gql`
   }
 }
     `;
+export const EstimateMinRemoveLiquidityAmountDocument = gql`
+    query EstimateMinRemoveLiquidityAmount($lpAddress: Bytes!) {
+  chromaticLPConfigs(
+    orderBy: blockNumber
+    orderDirection: desc
+    first: 1
+    where: {lp: $lpAddress}
+  ) {
+    automationFeeReserved
+  }
+  lptokenTotalSupplies(
+    where: {token: $lpAddress}
+    first: 1
+    orderBy: blockNumber
+    orderDirection: desc
+  ) {
+    amount
+  }
+  chromaticLPStats(
+    orderBy: blockNumber
+    orderDirection: desc
+    first: 1
+    where: {lp: $lpAddress}
+  ) {
+    holdingValue
+  }
+}
+    `;
+export const LpTotalSupplyDocument = gql`
+    query LpTotalSupply($lpAddress: Bytes!) {
+  lptokenTotalSupplies(
+    where: {token: $lpAddress}
+    first: 1
+    orderBy: blockNumber
+    orderDirection: desc
+  ) {
+    amount
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -2646,6 +2700,12 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     EstimateMinAddLiquidityAmount(variables: EstimateMinAddLiquidityAmountQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<EstimateMinAddLiquidityAmountQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<EstimateMinAddLiquidityAmountQuery>(EstimateMinAddLiquidityAmountDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'EstimateMinAddLiquidityAmount', 'query');
+    },
+    EstimateMinRemoveLiquidityAmount(variables: EstimateMinRemoveLiquidityAmountQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<EstimateMinRemoveLiquidityAmountQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<EstimateMinRemoveLiquidityAmountQuery>(EstimateMinRemoveLiquidityAmountDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'EstimateMinRemoveLiquidityAmount', 'query');
+    },
+    LpTotalSupply(variables: LpTotalSupplyQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LpTotalSupplyQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<LpTotalSupplyQuery>(LpTotalSupplyDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'LpTotalSupply', 'query');
     }
   };
 }

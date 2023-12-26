@@ -104,3 +104,45 @@ export const ESTIMATE_MIN_ADD_LIQUIDITY_AMOUNT = gql`
     }
   }
 `;
+
+export const ESTIMATE_MIN_REMOVE_LIQUIDITY_AMOUNT = gql`
+  query EstimateMinRemoveLiquidityAmount($lpAddress: Bytes!) {
+    chromaticLPConfigs(
+      orderBy: blockNumber
+      orderDirection: desc
+      first: 1
+      where: { lp: $lpAddress }
+    ) {
+      automationFeeReserved
+    }
+    lptokenTotalSupplies(
+      where: { token: $lpAddress }
+      first: 1
+      orderBy: blockNumber
+      orderDirection: desc
+    ) {
+      amount
+    }
+    chromaticLPStats(
+      orderBy: blockNumber
+      orderDirection: desc
+      first: 1
+      where: { lp: $lpAddress }
+    ) {
+      holdingValue
+    }
+  }
+`;
+
+export const LP_TOTAL_SUPPLY = gql`
+  query LpTotalSupply($lpAddress: Bytes!) {
+    lptokenTotalSupplies(
+      where: { token: $lpAddress }
+      first: 1
+      orderBy: blockNumber
+      orderDirection: desc
+    ) {
+      amount
+    }
+  }
+`;

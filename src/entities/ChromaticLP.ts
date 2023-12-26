@@ -46,7 +46,7 @@ export class ChromaticLP {
         }),
       settlementToken: async (lpAddress: Address): Promise<ContractIErc20Metadata> =>
         getContract({
-          address: await this.settlementToken(lpAddress),
+          address: (await this.getLpInfo(lpAddress)).settlementToken,
           abi: ierc20MetadataABI,
           publicClient: this._client.publicClient,
           walletClient: this._client.walletClient,
@@ -76,18 +76,6 @@ export class ChromaticLP {
         });
       },
     };
-  }
-
-  async marketOf(lpAddress: Address): Promise<Address> {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.market();
-    });
-  }
-
-  async settlementToken(lpAddress: Address): Promise<Address> {
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.settlementToken();
-    });
   }
 
   async getLpMeta(lpAddress: Address): Promise<LpMeta> {
@@ -185,10 +173,12 @@ export class ChromaticLP {
     });
   }
 
-  async totalSupply(lpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().lpToken(lpAddress).read.totalSupply();
-    });
+  async totalSupply(lpAddress: Address): Promise<BigInt> {
+    const result = await lpGraphSdk.LpTotalSupply({ lpAddress });
+    if (result.lptokenTotalSupplies.length < 1) {
+      throw Error("invalid lpAddress");
+    }
+    return BigInt(result.lptokenTotalSupplies[0].amount);
   }
 
   async balanceOf(lpAddress: Address, account: Address) {
@@ -218,11 +208,23 @@ export class ChromaticLP {
     );
   }
   async estimateMinRemoveLiquidityAmount(lpAddress: Address) {
-    const automationFeeReserved = await this.getLpConfig(lpAddress);
-    // return s_config.automationFeeReserved.mulDiv(totalSupply(), holdingValue());
-    return await handleBytesError(async () => {
-      return await this.contracts().lp(lpAddress).read.estimateMinRemoveLiquidityAmount();
+    const result = await lpGraphSdk.EstimateMinRemoveLiquidityAmount({
+      lpAddress,
     });
+    if (
+      result.chromaticLPConfigs.length < 1 ||
+      result.lptokenTotalSupplies.length < 1 ||
+      result.chromaticLPStats.length < 1
+    ) {
+      throw Error("invalid lpAddress");
+    }
+
+    const automationFeeReserved = BigInt(result.chromaticLPConfigs[0].automationFeeReserved);
+    const totalSupply = BigInt(result.lptokenTotalSupplies[0].amount);
+    const holdingValue = BigInt(result.chromaticLPStats[0].holdingValue);
+
+    // return s_config.automationFeeReserved.mulDiv(totalSupply(), holdingValue());
+    return (automationFeeReserved * totalSupply) / holdingValue;
   }
 
   async transferFrom(
