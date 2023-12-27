@@ -1,10 +1,9 @@
 import { Address, getContract } from "viem";
 import { Client } from "../Client";
 import { iChromaticLpABI, ierc20MetadataABI } from "../gen";
+import { lpGraphSdk } from "../lib/graphql";
 import type { ContractChromaticLP, ContractIErc20Metadata } from "../types";
 import { MAX_UINT256, checkClient, convertLpInfoType, handleBytesError } from "../utils/helpers";
-import { lpGraphSdk } from "../lib/graphql";
-import { omit } from "lodash";
 
 export const iChromaticMarketABI = [
   {

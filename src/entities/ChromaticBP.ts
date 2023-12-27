@@ -1,9 +1,9 @@
 import { Address, getContract, zeroAddress } from "viem";
 import { Client } from "../Client";
 import { iChromaticBpABI, ierc20MetadataABI } from "../gen";
+import { bpGraphSdk } from "../lib/graphql";
 import type { ContractChromaticBP, ContractIErc20Metadata } from "../types";
 import { MAX_UINT256, checkClient, convertBpInfoType, handleBytesError } from "../utils/helpers";
-import { bpGraphSdk } from "../lib/graphql";
 import { LpInfo } from "./ChromaticLP";
 
 export enum BPPeriod {

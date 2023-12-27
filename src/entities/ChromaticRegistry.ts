@@ -1,8 +1,8 @@
 import { Address, getContract } from "viem";
 import { Client } from "../Client";
 import { chromaticLpRegistryABI, chromaticLpRegistryAddress } from "../gen";
-import type { ContractChromaticLPRegistry } from "../types";
 import { registryGraphSdk } from "../lib/graphql";
+import type { ContractChromaticLPRegistry } from "../types";
 
 export class ChromaticRegistry {
   constructor(private readonly _client: Client) {}

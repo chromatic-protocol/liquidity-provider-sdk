@@ -1,8 +1,8 @@
 import { Address, getContract } from "viem";
 import { Client } from "../Client";
 import { chromaticBpFactoryABI, chromaticBpFactoryAddress } from "../gen";
-import type { ContractChromaticBPFactory } from "../types";
 import { bpFactoryGraphSdk } from "../lib/graphql";
+import type { ContractChromaticBPFactory } from "../types";
 
 export class ChromaticBPFactory {
   constructor(private readonly _client: Client) {}

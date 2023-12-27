@@ -1,9 +1,9 @@
 import { GraphQLClient, RequestMiddleware, Variables } from "graphql-request";
 
+import * as ChromaticBP from "./sdk/ChromaticBP";
 import * as ChromaticBPFactory from "./sdk/ChromaticBPFactory";
 import * as ChromaticLP from "./sdk/ChromaticLP";
 import * as ChromaticRegistry from "./sdk/ChromaticRegistry";
-import * as ChromaticBP from "./sdk/ChromaticBP";
 
 import { SUBGRAPH_API_URL } from "../../../codegen/config";
 
@@ -60,4 +60,5 @@ const bpFactoryGraphSdk = ChromaticBPFactory.getSdk(graphClient);
 const registryGraphSdk = ChromaticRegistry.getSdk(graphClient);
 const bpGraphSdk = ChromaticBP.getSdk(graphClient);
 
-export { lpGraphSdk, bpFactoryGraphSdk, registryGraphSdk, bpGraphSdk };
+export { bpFactoryGraphSdk, bpGraphSdk, lpGraphSdk, registryGraphSdk };
+
