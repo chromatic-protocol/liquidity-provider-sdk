@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 
-export const LP = gql`
-  query LP($lpAddress: ID!) {
+export const Lp = gql`
+  query Lp($lpAddress: ID!) {
     chromaticLP(id: $lpAddress) {
       id
       distributionRates
@@ -33,7 +33,7 @@ export const LP = gql`
 `;
 
 export const LP_STAT = gql`
-  query LPStat($lpAddress: Bytes!) {
+  query LpStat($lpAddress: Bytes!) {
     chromaticLPStats(
       orderBy: blockNumber
       orderDirection: desc

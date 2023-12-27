@@ -3620,7 +3620,7 @@ export type LpTotalSupplyQuery = { __typename?: 'Query', lptokenTotalSupplies: A
 
 
 export const LpDocument = gql`
-    query LP($lpAddress: ID!) {
+    query Lp($lpAddress: ID!) {
   chromaticLP(id: $lpAddress) {
     id
     distributionRates
@@ -3651,7 +3651,7 @@ export const LpDocument = gql`
 }
     `;
 export const LpStatDocument = gql`
-    query LPStat($lpAddress: Bytes!) {
+    query LpStat($lpAddress: Bytes!) {
   chromaticLPStats(
     orderBy: blockNumber
     orderDirection: desc
@@ -3743,11 +3743,11 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    LP(variables: LpQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LpQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<LpQuery>(LpDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'LP', 'query', variables);
+    Lp(variables: LpQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LpQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<LpQuery>(LpDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Lp', 'query', variables);
     },
-    LPStat(variables: LpStatQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LpStatQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<LpStatQuery>(LpStatDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'LPStat', 'query', variables);
+    LpStat(variables: LpStatQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LpStatQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<LpStatQuery>(LpStatDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'LpStat', 'query', variables);
     },
     GetReceiptsOf(variables: GetReceiptsOfQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetReceiptsOfQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetReceiptsOfQuery>(GetReceiptsOfDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetReceiptsOf', 'query', variables);

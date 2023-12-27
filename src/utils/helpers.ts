@@ -1,3 +1,4 @@
+import { omit } from "lodash";
 import { Client } from "../Client";
 import { BPInfo } from "../entities";
 import { LpInfo } from "../entities/ChromaticLP";
@@ -125,7 +126,7 @@ export function convertBpInfoType(queryResult: BpQueryResult): BPInfo {
 
 export function convertLpInfoType(queryResult: LpQueryResult): LpInfo {
   return {
-    ...queryResult,
+    ...omit(queryResult, ["__typename", "configs", "metas"]),
     rebalanceBPS: BigInt(queryResult.rebalanceBPS),
     rebalanceCheckingInterval: BigInt(queryResult.rebalanceCheckingInterval),
     utilizationTargetBPS: BigInt(queryResult.utilizationTargetBPS),

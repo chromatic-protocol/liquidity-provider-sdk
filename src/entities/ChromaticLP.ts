@@ -4,6 +4,7 @@ import { iChromaticLpABI, ierc20MetadataABI } from "../gen";
 import type { ContractChromaticLP, ContractIErc20Metadata } from "../types";
 import { MAX_UINT256, checkClient, convertLpInfoType, handleBytesError } from "../utils/helpers";
 import { lpGraphSdk } from "../lib/graphql";
+import { omit } from "lodash";
 
 export const iChromaticMarketABI = [
   {
@@ -79,23 +80,30 @@ export class ChromaticLP {
   }
 
   async getLpStat(lpAddress: Address): Promise<LpStat> {
-    const result = await lpGraphSdk.LPStat({ lpAddress });
+    const result = await lpGraphSdk.LpStat({ lpAddress });
     if (result.chromaticLPStats.length < 1) {
-      throw Error("invalid lpAddress");
+      return {
+        pendingClbValue: 0n,
+        pendingValue: 0n,
+        totalValue: 0n,
+        utilization: 0,
+        holdingValue: 0n,
+        holdingClbValue: 0n,
+      };
     }
     const lpStat = result.chromaticLPStats[0];
     return {
-      ...lpStat,
       pendingClbValue: BigInt(lpStat.pendingClbValue),
       pendingValue: BigInt(lpStat.pendingValue),
       totalValue: BigInt(lpStat.totalValue),
+      utilization: lpStat.utilization,
       holdingValue: BigInt(lpStat.holdingValue),
       holdingClbValue: BigInt(lpStat.holdingClbValue),
     };
   }
 
   async getLpInfo(lpAddress: Address): Promise<LpInfo> {
-    const result = await lpGraphSdk.LP({ lpAddress });
+    const result = await lpGraphSdk.Lp({ lpAddress });
     if (!result.chromaticLP) {
       throw Error("invalid lpAddress");
     }
@@ -154,7 +162,7 @@ export class ChromaticLP {
   async totalSupply(lpAddress: Address): Promise<BigInt> {
     const result = await lpGraphSdk.LpTotalSupply({ lpAddress });
     if (result.lptokenTotalSupplies.length < 1) {
-      throw Error("invalid lpAddress");
+      return 0n;
     }
     return BigInt(result.lptokenTotalSupplies[0].amount);
   }
@@ -174,7 +182,7 @@ export class ChromaticLP {
   async estimateMinAddLiquidityAmount(lpAddress: Address) {
     const result = await lpGraphSdk.EstimateMinAddLiquidityAmount({ lpAddress });
     if (!result.chromaticLP || result.chromaticLP.configs.length < 1) {
-      throw Error("invalid lpAddress");
+      return 0;
     }
     const automationFeeReserved = BigInt(result.chromaticLP.configs[0].automationFeeReserved);
     const utilizationTargetBPS = BigInt(result.chromaticLP!.utilizationTargetBPS);
@@ -194,7 +202,7 @@ export class ChromaticLP {
       result.lptokenTotalSupplies.length < 1 ||
       result.chromaticLPStats.length < 1
     ) {
-      throw Error("invalid lpAddress");
+      return 0;
     }
 
     const automationFeeReserved = BigInt(result.chromaticLPConfigs[0].automationFeeReserved);

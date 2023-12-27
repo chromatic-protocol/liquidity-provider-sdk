@@ -32,6 +32,10 @@ const urlMap: UrlMap = [
     operations: getOperations(ChromaticRegistry),
     url: `${SUBGRAPH_API_URL}/chromatic-lp`,
   },
+  {
+    operations: getOperations(ChromaticBP),
+    url: `${SUBGRAPH_API_URL}/chromatic-lp`,
+  },
 ];
 
 const getRequestMiddleware =
