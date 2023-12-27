@@ -3,7 +3,7 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 export const SUBGRAPH_API_URL =
   "https://graph-arbitrum-sepolia.api.chromatic.finance/subgraphs/name";
 
-const INPUT = ["ChromaticRegistry.ts", "ChromaticBPFactory.ts", "ChromaticLP.ts"];
+const INPUT = ["ChromaticRegistry.ts", "ChromaticBPFactory.ts", "ChromaticLP.ts", "ChromaticBP.ts"];
 const GENERATED_PATH = "src/lib/graphql/sdk";
 
 const common = {

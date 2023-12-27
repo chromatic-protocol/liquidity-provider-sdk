@@ -1,4 +1,6 @@
 import { Client } from "../Client";
+import { BPInfo } from "../entities";
+import { LpInfo } from "../entities/ChromaticLP";
 import {
   chromaticBpFactoryABI,
   chromaticLpRegistryABI,
@@ -96,3 +98,93 @@ export const errorSignitures: ErrorSignatures = [
 export const MAX_UINT256 = hexToBigInt(
   "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
 );
+
+export function convertBpInfoType(queryResult: BpQueryResult): BPInfo {
+  const totalRaised = queryResult.totalRaised ?? [];
+  const deposits = queryResult.deposits ?? [];
+  const refunds = queryResult.refunds ?? [];
+  const claims = queryResult.claims ?? [];
+  return {
+    address: queryResult.id,
+    totalReward: BigInt(queryResult.totalReward),
+    minRaisingTarget: BigInt(queryResult.minRaisingTarget),
+    maxRaisingTarget: BigInt(queryResult.maxRaisingTarget),
+    startTimeOfWarmup: BigInt(queryResult.startTimeOfWarmup),
+    lp: convertLpInfoType(queryResult.lp),
+    endTimeOfWarmup: BigInt(queryResult.statuses[0].endTimeOfWarmup),
+    endTimeOfLockup: BigInt(queryResult.statuses[0].endTimeOfLockup),
+    currentPeriod: queryResult.statuses[0].currentPeriod,
+    status: queryResult.statuses[0].status,
+    totalRaisedAmount: totalRaised.length < 1 ? 0n : BigInt(totalRaised[0].amount),
+    depositedAmount: deposits.length < 1 ? 0n : BigInt(deposits[0].amount),
+    refundedAmount: refunds.length < 1 ? 0n : BigInt(refunds[0].amount),
+    claimedBpTokenAmount: claims.length < 1 ? 0n : BigInt(claims[0].bpTokenAmount),
+    claimedLpTokenAmount: claims.length < 1 ? 0n : BigInt(claims[0].lpTokenAmount),
+  };
+}
+
+export function convertLpInfoType(queryResult: LpQueryResult): LpInfo {
+  return {
+    ...queryResult,
+    rebalanceBPS: BigInt(queryResult.rebalanceBPS),
+    rebalanceCheckingInterval: BigInt(queryResult.rebalanceCheckingInterval),
+    utilizationTargetBPS: BigInt(queryResult.utilizationTargetBPS),
+    clbTokenIds: queryResult.clbTokenIds.map((e) => BigInt(e)),
+    lpName: queryResult.metas[0].lpName,
+    lpTag: queryResult.metas[0].lpTag,
+    minHoldingValueToRebalance: BigInt(queryResult.configs[0].minHoldingValueToRebalance),
+    automationFeeReserved: BigInt(queryResult.configs[0].automationFeeReserved),
+  };
+}
+
+type BpQueryResult = {
+  __typename?: "ChromaticBP";
+  id: `0x${string}`;
+  totalReward: string;
+  minRaisingTarget: string;
+  maxRaisingTarget: string;
+  startTimeOfWarmup: string;
+  lp: LpQueryResult;
+  statuses: Array<{
+    __typename?: "ChromaticBPStatus";
+    endTimeOfWarmup: string;
+    endTimeOfLockup: string;
+    currentPeriod: number;
+    status: number;
+  }>;
+  totalRaised?: Array<{ __typename?: "ChromaticBPTotalRaised"; amount: string }>;
+  deposits?: Array<{ __typename?: "ChromaticBPDeposit"; amount: string }>;
+  refunds?: Array<{ __typename?: "ChromaticBPRefund"; amount: string }>;
+  claims?: Array<{
+    __typename?: "ChromaticBPClaim";
+    bpTokenAmount: string;
+    lpTokenAmount: string;
+  }>;
+};
+
+type LpQueryResult = {
+  __typename?: "ChromaticLP";
+  id: `0x${string}`;
+  longShortInfo: number;
+  market: `0x${string}`;
+  settlementToken: `0x${string}`;
+  settlementTokenSymbol: string;
+  settlementTokenDecimals: number;
+  oracleProvider: `0x${string}`;
+  oracleDescription: string;
+  feeRates: Array<number>;
+  clbTokenIds: Array<string>;
+  lpTokenName: string;
+  lpTokenSymbol: string;
+  lpTokenDecimals: number;
+  distributionRates: Array<number>;
+  rebalanceBPS: string;
+  rebalanceCheckingInterval: string;
+  utilizationTargetBPS: string;
+  metas: Array<{ __typename?: "ChromaticLPMeta"; lpName: string; lpTag: string }>;
+  configs: Array<{
+    __typename?: "ChromaticLPConfig";
+    automationFeeReserved: string;
+    minHoldingValueToRebalance: string;
+  }>;
+};

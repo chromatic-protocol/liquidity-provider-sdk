@@ -3575,163 +3575,152 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
-export type LpQueryVariables = Exact<{
-  lpAddress: Scalars['ID']['input'];
+export type CurrentWarmupPoolQueryVariables = Exact<{
+  currentTimestamp: Scalars['BigInt']['input'];
+  account: Scalars['Bytes']['input'];
 }>;
 
 
-export type LpQuery = { __typename?: 'Query', chromaticLP?: { __typename?: 'ChromaticLP', id: `0x${string}`, distributionRates: Array<number>, clbTokenIds: Array<string>, feeRates: Array<number>, longShortInfo: number, lpTokenDecimals: number, lpTokenName: string, lpTokenSymbol: string, market: `0x${string}`, oracleDescription: string, oracleProvider: `0x${string}`, rebalanceBPS: string, rebalanceCheckingInterval: string, settlementToken: `0x${string}`, settlementTokenDecimals: number, settlementTokenSymbol: string, utilizationTargetBPS: string, metas: Array<{ __typename?: 'ChromaticLPMeta', lpName: string, lpTag: string }>, configs: Array<{ __typename?: 'ChromaticLPConfig', automationFeeReserved: string, minHoldingValueToRebalance: string }> } | null };
+export type CurrentWarmupPoolQuery = { __typename?: 'Query', chromaticBPs: Array<{ __typename?: 'ChromaticBP', id: `0x${string}`, totalReward: string, minRaisingTarget: string, maxRaisingTarget: string, startTimeOfWarmup: string, lp: { __typename?: 'ChromaticLP', id: `0x${string}`, longShortInfo: number, market: `0x${string}`, settlementToken: `0x${string}`, settlementTokenSymbol: string, settlementTokenDecimals: number, oracleProvider: `0x${string}`, oracleDescription: string, feeRates: Array<number>, clbTokenIds: Array<string>, lpTokenName: string, lpTokenSymbol: string, lpTokenDecimals: number, distributionRates: Array<number>, rebalanceBPS: string, rebalanceCheckingInterval: string, utilizationTargetBPS: string, metas: Array<{ __typename?: 'ChromaticLPMeta', lpName: string, lpTag: string }>, configs: Array<{ __typename?: 'ChromaticLPConfig', automationFeeReserved: string, minHoldingValueToRebalance: string }> }, statuses: Array<{ __typename?: 'ChromaticBPStatus', endTimeOfWarmup: string, endTimeOfLockup: string, currentPeriod: number, status: number }>, totalRaised: Array<{ __typename?: 'ChromaticBPTotalRaised', amount: string }>, deposits: Array<{ __typename?: 'ChromaticBPDeposit', amount: string }>, refunds: Array<{ __typename?: 'ChromaticBPRefund', amount: string }>, claims: Array<{ __typename?: 'ChromaticBPClaim', bpTokenAmount: string, lpTokenAmount: string }> }> };
 
-export type LpStatQueryVariables = Exact<{
-  lpAddress: Scalars['Bytes']['input'];
+export type UpcomingWarmupPoolQueryVariables = Exact<{
+  currentTimestamp: Scalars['BigInt']['input'];
 }>;
 
 
-export type LpStatQuery = { __typename?: 'Query', chromaticLPStats: Array<{ __typename?: 'ChromaticLPStat', pendingClbValue: string, pendingValue: string, totalValue: string, utilization: number, holdingValue: string, holdingClbValue: string }> };
-
-export type GetReceiptsOfQueryVariables = Exact<{
-  lpAddress: Scalars['Bytes']['input'];
-  owner?: InputMaybe<Scalars['Bytes']['input']>;
-}>;
+export type UpcomingWarmupPoolQuery = { __typename?: 'Query', chromaticBPs: Array<{ __typename?: 'ChromaticBP', id: `0x${string}`, totalReward: string, minRaisingTarget: string, maxRaisingTarget: string, startTimeOfWarmup: string, lp: { __typename?: 'ChromaticLP', id: `0x${string}`, longShortInfo: number, market: `0x${string}`, settlementToken: `0x${string}`, settlementTokenSymbol: string, settlementTokenDecimals: number, oracleProvider: `0x${string}`, oracleDescription: string, feeRates: Array<number>, clbTokenIds: Array<string>, lpTokenName: string, lpTokenSymbol: string, lpTokenDecimals: number, distributionRates: Array<number>, rebalanceBPS: string, rebalanceCheckingInterval: string, utilizationTargetBPS: string, metas: Array<{ __typename?: 'ChromaticLPMeta', lpName: string, lpTag: string }>, configs: Array<{ __typename?: 'ChromaticLPConfig', automationFeeReserved: string, minHoldingValueToRebalance: string }> }, statuses: Array<{ __typename?: 'ChromaticBPStatus', endTimeOfWarmup: string, endTimeOfLockup: string, currentPeriod: number, status: number }> }> };
 
 
-export type GetReceiptsOfQuery = { __typename?: 'Query', addLiquidities: Array<{ __typename?: 'AddLiquidity', receiptId: string, provider: `0x${string}`, recipient: `0x${string}`, oracleVersion: string, amount: string }>, removeLiquidities: Array<{ __typename?: 'RemoveLiquidity', receiptId: string, provider: `0x${string}`, recipient: `0x${string}`, oracleVersion: string, lpTokenAmount: string }> };
-
-export type EstimateMinAddLiquidityAmountQueryVariables = Exact<{
-  lpAddress: Scalars['ID']['input'];
-}>;
-
-
-export type EstimateMinAddLiquidityAmountQuery = { __typename?: 'Query', chromaticLP?: { __typename?: 'ChromaticLP', utilizationTargetBPS: string, configs: Array<{ __typename?: 'ChromaticLPConfig', automationFeeReserved: string }> } | null };
-
-export type EstimateMinRemoveLiquidityAmountQueryVariables = Exact<{
-  lpAddress: Scalars['Bytes']['input'];
-}>;
-
-
-export type EstimateMinRemoveLiquidityAmountQuery = { __typename?: 'Query', chromaticLPConfigs: Array<{ __typename?: 'ChromaticLPConfig', automationFeeReserved: string }>, lptokenTotalSupplies: Array<{ __typename?: 'LPTokenTotalSupply', amount: string }>, chromaticLPStats: Array<{ __typename?: 'ChromaticLPStat', holdingValue: string }> };
-
-export type LpTotalSupplyQueryVariables = Exact<{
-  lpAddress: Scalars['Bytes']['input'];
-}>;
-
-
-export type LpTotalSupplyQuery = { __typename?: 'Query', lptokenTotalSupplies: Array<{ __typename?: 'LPTokenTotalSupply', amount: string }> };
-
-
-export const LpDocument = gql`
-    query LP($lpAddress: ID!) {
-  chromaticLP(id: $lpAddress) {
+export const CurrentWarmupPoolDocument = gql`
+    query CurrentWarmupPool($currentTimestamp: BigInt!, $account: Bytes!) {
+  chromaticBPs(
+    skip: 0
+    first: 100
+    orderBy: id
+    orderDirection: asc
+    where: {startTimeOfWarmup_gte: $currentTimestamp, initialEndTimeOfWarmup_lt: $currentTimestamp}
+    subgraphError: deny
+  ) {
     id
-    distributionRates
-    clbTokenIds
-    feeRates
-    longShortInfo
-    lpTokenDecimals
-    lpTokenName
-    lpTokenSymbol
-    market
-    oracleDescription
-    oracleProvider
-    rebalanceBPS
-    rebalanceCheckingInterval
-    settlementToken
-    settlementTokenDecimals
-    settlementTokenSymbol
-    utilizationTargetBPS
-    metas(orderBy: blockNumber, orderDirection: desc, first: 1) {
-      lpName
-      lpTag
+    totalReward
+    minRaisingTarget
+    maxRaisingTarget
+    startTimeOfWarmup
+    lp {
+      id
+      longShortInfo
+      market
+      settlementToken
+      settlementTokenSymbol
+      settlementTokenDecimals
+      oracleProvider
+      oracleDescription
+      feeRates
+      clbTokenIds
+      lpTokenName
+      lpTokenSymbol
+      lpTokenDecimals
+      distributionRates
+      rebalanceBPS
+      rebalanceCheckingInterval
+      utilizationTargetBPS
+      metas(skip: 0, first: 1, orderBy: blockNumber, orderDirection: desc) {
+        lpName
+        lpTag
+      }
+      configs(skip: 0, first: 1, orderBy: blockNumber, orderDirection: desc) {
+        automationFeeReserved
+        minHoldingValueToRebalance
+      }
     }
-    configs(orderBy: blockNumber, orderDirection: desc, first: 1) {
-      automationFeeReserved
-      minHoldingValueToRebalance
+    statuses(skip: 0, first: 1, orderBy: blockNumber, orderDirection: desc) {
+      endTimeOfWarmup
+      endTimeOfLockup
+      currentPeriod
+      status
+    }
+    totalRaised(skip: 0, first: 1, orderBy: blockNumber, orderDirection: desc) {
+      amount
+    }
+    deposits(
+      skip: 0
+      first: 1
+      orderBy: blockNumber
+      orderDirection: desc
+      where: {provider: $account}
+    ) {
+      amount
+    }
+    refunds(
+      skip: 0
+      first: 1
+      orderBy: blockNumber
+      orderDirection: desc
+      where: {provider: $account}
+    ) {
+      amount
+    }
+    claims(
+      skip: 0
+      first: 1
+      orderBy: blockNumber
+      orderDirection: desc
+      where: {provider: $account}
+    ) {
+      bpTokenAmount
+      lpTokenAmount
     }
   }
 }
     `;
-export const LpStatDocument = gql`
-    query LPStat($lpAddress: Bytes!) {
-  chromaticLPStats(
-    orderBy: blockNumber
-    orderDirection: desc
-    first: 1
-    where: {lp: $lpAddress}
+export const UpcomingWarmupPoolDocument = gql`
+    query UpcomingWarmupPool($currentTimestamp: BigInt!) {
+  chromaticBPs(
+    skip: 0
+    first: 100
+    orderBy: id
+    orderDirection: asc
+    where: {startTimeOfWarmup_lt: $currentTimestamp}
+    subgraphError: deny
   ) {
-    pendingClbValue
-    pendingValue
-    totalValue
-    utilization
-    holdingValue
-    holdingClbValue
-  }
-}
-    `;
-export const GetReceiptsOfDocument = gql`
-    query GetReceiptsOf($lpAddress: Bytes!, $owner: Bytes) {
-  addLiquidities(where: {lp: $lpAddress, provider: $owner}) {
-    receiptId
-    provider
-    recipient
-    oracleVersion
-    amount
-  }
-  removeLiquidities(where: {lp: $lpAddress, provider: $owner}) {
-    receiptId
-    provider
-    recipient
-    oracleVersion
-    lpTokenAmount
-  }
-}
-    `;
-export const EstimateMinAddLiquidityAmountDocument = gql`
-    query EstimateMinAddLiquidityAmount($lpAddress: ID!) {
-  chromaticLP(id: $lpAddress) {
-    utilizationTargetBPS
-    configs(orderBy: blockNumber, orderDirection: desc, first: 1) {
-      automationFeeReserved
+    id
+    totalReward
+    minRaisingTarget
+    maxRaisingTarget
+    startTimeOfWarmup
+    lp {
+      id
+      longShortInfo
+      market
+      settlementToken
+      settlementTokenSymbol
+      settlementTokenDecimals
+      oracleProvider
+      oracleDescription
+      feeRates
+      clbTokenIds
+      lpTokenName
+      lpTokenSymbol
+      lpTokenDecimals
+      distributionRates
+      rebalanceBPS
+      rebalanceCheckingInterval
+      utilizationTargetBPS
+      metas(skip: 0, first: 1, orderBy: blockNumber, orderDirection: desc) {
+        lpName
+        lpTag
+      }
+      configs(skip: 0, first: 1, orderBy: blockNumber, orderDirection: desc) {
+        automationFeeReserved
+        minHoldingValueToRebalance
+      }
     }
-  }
-}
-    `;
-export const EstimateMinRemoveLiquidityAmountDocument = gql`
-    query EstimateMinRemoveLiquidityAmount($lpAddress: Bytes!) {
-  chromaticLPConfigs(
-    orderBy: blockNumber
-    orderDirection: desc
-    first: 1
-    where: {lp_: {id: $lpAddress}}
-  ) {
-    automationFeeReserved
-  }
-  lptokenTotalSupplies(
-    where: {token: $lpAddress}
-    first: 1
-    orderBy: blockNumber
-    orderDirection: desc
-  ) {
-    amount
-  }
-  chromaticLPStats(
-    orderBy: blockNumber
-    orderDirection: desc
-    first: 1
-    where: {lp: $lpAddress}
-  ) {
-    holdingValue
-  }
-}
-    `;
-export const LpTotalSupplyDocument = gql`
-    query LpTotalSupply($lpAddress: Bytes!) {
-  lptokenTotalSupplies(
-    where: {token: $lpAddress}
-    first: 1
-    orderBy: blockNumber
-    orderDirection: desc
-  ) {
-    amount
+    statuses(skip: 0, first: 1, orderBy: blockNumber, orderDirection: desc) {
+      endTimeOfWarmup
+      endTimeOfLockup
+      currentPeriod
+      status
+    }
   }
 }
     `;
@@ -3743,23 +3732,11 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    LP(variables: LpQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LpQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<LpQuery>(LpDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'LP', 'query', variables);
+    CurrentWarmupPool(variables: CurrentWarmupPoolQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CurrentWarmupPoolQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<CurrentWarmupPoolQuery>(CurrentWarmupPoolDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CurrentWarmupPool', 'query', variables);
     },
-    LPStat(variables: LpStatQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LpStatQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<LpStatQuery>(LpStatDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'LPStat', 'query', variables);
-    },
-    GetReceiptsOf(variables: GetReceiptsOfQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetReceiptsOfQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetReceiptsOfQuery>(GetReceiptsOfDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetReceiptsOf', 'query', variables);
-    },
-    EstimateMinAddLiquidityAmount(variables: EstimateMinAddLiquidityAmountQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<EstimateMinAddLiquidityAmountQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<EstimateMinAddLiquidityAmountQuery>(EstimateMinAddLiquidityAmountDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'EstimateMinAddLiquidityAmount', 'query', variables);
-    },
-    EstimateMinRemoveLiquidityAmount(variables: EstimateMinRemoveLiquidityAmountQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<EstimateMinRemoveLiquidityAmountQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<EstimateMinRemoveLiquidityAmountQuery>(EstimateMinRemoveLiquidityAmountDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'EstimateMinRemoveLiquidityAmount', 'query', variables);
-    },
-    LpTotalSupply(variables: LpTotalSupplyQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LpTotalSupplyQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<LpTotalSupplyQuery>(LpTotalSupplyDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'LpTotalSupply', 'query', variables);
+    UpcomingWarmupPool(variables: UpcomingWarmupPoolQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<UpcomingWarmupPoolQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpcomingWarmupPoolQuery>(UpcomingWarmupPoolDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpcomingWarmupPool', 'query', variables);
     }
   };
 }

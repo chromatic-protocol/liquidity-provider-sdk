@@ -1,8 +1,10 @@
-import { Address, getContract } from "viem";
+import { Address, getContract, zeroAddress } from "viem";
 import { Client } from "../Client";
 import { iChromaticBpABI, ierc20MetadataABI } from "../gen";
 import type { ContractChromaticBP, ContractIErc20Metadata } from "../types";
-import { MAX_UINT256, checkClient, handleBytesError } from "../utils/helpers";
+import { MAX_UINT256, checkClient, convertBpInfoType, handleBytesError } from "../utils/helpers";
+import { bpGraphSdk } from "../lib/graphql";
+import { LpInfo } from "./ChromaticLP";
 
 export enum BPPeriod {
   PREWARMUP,
@@ -49,96 +51,23 @@ export class ChromaticBP {
     };
   }
 
-  async totalRaised(bpAddress: Address): Promise<bigint> {
-    return await handleBytesError(async () => {
-      return await this.contracts().bp(bpAddress).read.totalRaised();
-    });
+  async currentPools(): Promise<BPInfo[]> {
+    const currentTimestamp = `${Math.floor(Date.now() / 1000)}`;
+    const account = this._client.publicClient?.account ?? zeroAddress;
+    const result = await bpGraphSdk.CurrentWarmupPool({ currentTimestamp, account });
+    const targetPools = result.chromaticBPs.filter(
+      (e) => e.statuses.length > 0 && e.statuses[0].status === 1
+    );
+    return targetPools.map((e) => convertBpInfoType(e));
   }
 
-  async minRaisingTarget(bpAddress: Address): Promise<bigint> {
-    return await handleBytesError(async () => {
-      return await this.contracts().bp(bpAddress).read.minRaisingTarget();
-    });
-  }
-
-  async maxRaisingTarget(bpAddress: Address): Promise<bigint> {
-    return await handleBytesError(async () => {
-      return await this.contracts().bp(bpAddress).read.maxRaisingTarget();
-    });
-  }
-  async startTimeOfWarmup(bpAddress: Address): Promise<bigint> {
-    return await handleBytesError(async () => {
-      return await this.contracts().bp(bpAddress).read.startTimeOfWarmup();
-    });
-  }
-  async endTimeOfWarmup(bpAddress: Address): Promise<bigint> {
-    return await handleBytesError(async () => {
-      return await this.contracts().bp(bpAddress).read.endTimeOfWarmup();
-    });
-  }
-
-  async targetLP(bpAddress: Address): Promise<Address> {
-    return await handleBytesError(async () => {
-      return await this.contracts().bp(bpAddress).read.targetLP();
-    });
-  }
-
-  async settlementToken(bpAddress: Address): Promise<Address> {
-    return await handleBytesError(async () => {
-      return await this.contracts().bp(bpAddress).read.settlementToken();
-    });
-  }
-
-  async currentPeriod(bpAddress: Address): Promise<BPPeriod> {
-    return await handleBytesError(async () => {
-      return await this.contracts().bp(bpAddress).read.currentPeriod();
-    });
-  }
-
-  async isDepositable(bpAddress: Address): Promise<boolean> {
-    return await handleBytesError(async () => {
-      return await this.contracts().bp(bpAddress).read.isDepositable();
-    });
-  }
-
-  async isRefundable(bpAddress: Address): Promise<boolean> {
-    return await handleBytesError(async () => {
-      return await this.contracts().bp(bpAddress).read.isRefundable();
-    });
-  }
-
-  async isClaimable(bpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().bp(bpAddress).read.isClaimable();
-    });
-  }
-
-  async totalReward(bpAddress: Address) {
-    return await handleBytesError(async () => {
-      return await this.contracts().bp(bpAddress).read.totalReward();
-    });
-  }
-
-  async status(bpAddress: Address): Promise<BPStatus> {
-    return await handleBytesError(async () => {
-      return await this.contracts().bp(bpAddress).read.status();
-    });
-  }
-
-  async bpTokenMeta(bpAddress: Address) {
-    return await handleBytesError(async () => {
-      const bpContract = await this.contracts().bpToken(bpAddress);
-      const [name, symbol, decimals] = await Promise.all([
-        bpContract.read.name(),
-        bpContract.read.symbol(),
-        bpContract.read.decimals(),
-      ]);
-      return {
-        name,
-        symbol,
-        decimals,
-      };
-    });
+  async upcomingPools(): Promise<BPInfo[]> {
+    const currentTimestamp = `${Math.floor(Date.now() / 1000)}`;
+    const result = await bpGraphSdk.UpcomingWarmupPool({ currentTimestamp });
+    const targetPools = result.chromaticBPs.filter(
+      (e) => e.statuses.length > 0 && e.statuses[0].status === 0
+    );
+    return targetPools.map((e) => convertBpInfoType(e));
   }
 
   async totalSupply(bpAddress: Address) {
@@ -156,6 +85,12 @@ export class ChromaticBP {
   async allowance(bpAddress: Address, owner: Address, spender: Address) {
     return await handleBytesError(async () => {
       return await this.contracts().bpToken(bpAddress).read.allowance([owner, spender]);
+    });
+  }
+
+  async settlementToken(bpAddress: Address) {
+    return await handleBytesError(async () => {
+      return await this.contracts().bp(bpAddress).read.settlementToken();
     });
   }
 
@@ -302,3 +237,21 @@ export class ChromaticBP {
     return canExec;
   }
 }
+
+export type BPInfo = {
+  address: Address;
+  totalReward: bigint;
+  minRaisingTarget: bigint;
+  maxRaisingTarget: bigint;
+  startTimeOfWarmup: bigint;
+  lp: LpInfo;
+  endTimeOfWarmup: bigint;
+  endTimeOfLockup: bigint;
+  currentPeriod: number;
+  status: number;
+  totalRaisedAmount: bigint;
+  depositedAmount: bigint;
+  refundedAmount: bigint;
+  claimedBpTokenAmount: bigint;
+  claimedLpTokenAmount: bigint;
+};

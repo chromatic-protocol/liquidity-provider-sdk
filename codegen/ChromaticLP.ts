@@ -3,6 +3,7 @@ import { gql } from "graphql-request";
 export const LP = gql`
   query LP($lpAddress: ID!) {
     chromaticLP(id: $lpAddress) {
+      id
       distributionRates
       clbTokenIds
       feeRates

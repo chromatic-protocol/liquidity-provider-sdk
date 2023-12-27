@@ -2,7 +2,7 @@ import { Address, getContract } from "viem";
 import { Client } from "../Client";
 import { iChromaticLpABI, ierc20MetadataABI } from "../gen";
 import type { ContractChromaticLP, ContractIErc20Metadata } from "../types";
-import { MAX_UINT256, checkClient, handleBytesError } from "../utils/helpers";
+import { MAX_UINT256, checkClient, convertLpInfoType, handleBytesError } from "../utils/helpers";
 import { lpGraphSdk } from "../lib/graphql";
 
 export const iChromaticMarketABI = [
@@ -104,17 +104,7 @@ export class ChromaticLP {
       throw Error("invalid lpAddress");
     }
 
-    return {
-      ...lpInfo,
-      rebalanceBPS: BigInt(lpInfo.rebalanceBPS),
-      rebalanceCheckingInterval: BigInt(lpInfo.rebalanceCheckingInterval),
-      utilizationTargetBPS: BigInt(lpInfo.utilizationTargetBPS),
-      clbTokenIds: lpInfo.clbTokenIds.map((e) => BigInt(e)),
-      lpName: lpInfo.metas[0].lpName,
-      lpTag: lpInfo.metas[0].lpTag,
-      minHoldingValueToRebalance: BigInt(lpInfo.configs[0].minHoldingValueToRebalance),
-      automationFeeReserved: BigInt(lpInfo.configs[0].automationFeeReserved),
-    };
+    return convertLpInfoType(lpInfo);
   }
 
   async getReceiptsOf(lpAddress: Address, owner: Address): Promise<LpReceipt[]> {
