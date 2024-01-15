@@ -188,8 +188,9 @@ export class ChromaticBP {
       await settlementToken.read.allowance([account, bpAddress], {
         account: account,
       });
-    if ((await allowance()) < amount) {
-      const { request } = await settlementToken.simulate.approve([bpAddress, amount], {
+    const requiredAmount = amount - (await allowance());
+    if (requiredAmount > 0) {
+      const { request } = await settlementToken.simulate.approve([bpAddress, requiredAmount], {
         account: account,
       });
 
@@ -211,8 +212,9 @@ export class ChromaticBP {
       await bpToken.read.allowance([account, bpAddress], {
         account: account,
       });
-    if ((await allowance()) < amount) {
-      const { request } = await bpToken.simulate.approve([bpAddress, amount], {
+    const requiredAmount = amount - (await allowance());
+    if (requiredAmount > 0) {
+      const { request } = await bpToken.simulate.approve([bpAddress, requiredAmount], {
         account: account,
       });
 

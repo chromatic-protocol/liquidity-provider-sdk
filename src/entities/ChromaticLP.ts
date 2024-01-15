@@ -290,8 +290,9 @@ export class ChromaticLP {
       await settlementToken.read.allowance([account, lpAddress], {
         account: account,
       });
-    if ((await allowance()) < amount) {
-      const { request } = await settlementToken.simulate.approve([lpAddress, amount], {
+    const requiredAmount = amount - (await allowance());
+    if (requiredAmount > 0) {
+      const { request } = await settlementToken.simulate.approve([lpAddress, requiredAmount], {
         account: account,
       });
 
@@ -313,8 +314,9 @@ export class ChromaticLP {
       await lpToken.read.allowance([account, lpAddress], {
         account: account,
       });
-    if ((await allowance()) < amount) {
-      const { request } = await lpToken.simulate.approve([lpAddress, amount], {
+    const requiredAmount = amount - (await allowance());
+    if (requiredAmount > 0) {
+      const { request } = await lpToken.simulate.approve([lpAddress, requiredAmount], {
         account: account,
       });
 
