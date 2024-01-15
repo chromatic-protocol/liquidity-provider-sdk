@@ -2,7 +2,7 @@ import { Address, getContract } from "viem";
 import { Client } from "../Client";
 import { iChromaticBpABI, ierc20MetadataABI } from "../gen";
 import type { ContractChromaticBP, ContractIErc20Metadata } from "../types";
-import { MAX_UINT256, checkClient, handleBytesError } from "../utils/helpers";
+import { checkClient, handleBytesError } from "../utils/helpers";
 
 export enum BPPeriod {
   PREWARMUP,
@@ -127,7 +127,7 @@ export class ChromaticBP {
 
   async bpTokenMeta(bpAddress: Address) {
     return await handleBytesError(async () => {
-      const bpContract = await this.contracts().bpToken(bpAddress);
+      const bpContract = this.contracts().bpToken(bpAddress);
       const [name, symbol, decimals] = await Promise.all([
         bpContract.read.name(),
         bpContract.read.symbol(),
@@ -184,36 +184,44 @@ export class ChromaticBP {
     checkClient(this._client);
     const settlementToken = await this.contracts().settlementToken(bpAddress);
     const account = this._client.walletClient.account!.address;
-    const allowance = await settlementToken.read.allowance([account, bpAddress], {
-      account: account,
-    });
-    if (allowance < amount) {
-      const { request } = await settlementToken.simulate.approve([bpAddress, MAX_UINT256], {
+    const allowance = async () =>
+      await settlementToken.read.allowance([account, bpAddress], {
+        account: account,
+      });
+    if ((await allowance()) < amount) {
+      const { request } = await settlementToken.simulate.approve([bpAddress, amount], {
         account: account,
       });
 
       const hash = await this._client.walletClient.writeContract(request);
       const receipt = await this._client.publicClient.waitForTransactionReceipt({ hash });
-      return receipt !== undefined;
+      if (receipt) {
+        return (await allowance()) >= amount;
+      }
+      return false;
     }
     return true;
   }
 
   async approveBpTokenToBp(bpAddress: Address, amount: bigint): Promise<boolean> {
     checkClient(this._client);
-    const bpToken = await this.contracts().bpToken(bpAddress);
+    const bpToken = this.contracts().bpToken(bpAddress);
     const account = this._client.walletClient.account!.address;
-    const allowance = await bpToken.read.allowance([account, bpAddress], {
-      account: account,
-    });
-    if (allowance < amount) {
-      const { request } = await bpToken.simulate.approve([bpAddress, MAX_UINT256], {
+    const allowance = async () =>
+      await bpToken.read.allowance([account, bpAddress], {
+        account: account,
+      });
+    if ((await allowance()) < amount) {
+      const { request } = await bpToken.simulate.approve([bpAddress, amount], {
         account: account,
       });
 
       const hash = await this._client.walletClient.writeContract(request);
       const receipt = await this._client.publicClient.waitForTransactionReceipt({ hash });
-      return receipt !== undefined;
+      if (receipt) {
+        return (await allowance()) >= amount;
+      }
+      return false;
     }
     return true;
   }
@@ -222,7 +230,7 @@ export class ChromaticBP {
     checkClient(this._client);
 
     if (!(await this.approveSettlementTokenToBp(bpAddress, amount))) {
-      return;
+      throw new Error("SettlementToken: insufficient allowance");
     }
     const account = this._client.walletClient.account!.address;
 
