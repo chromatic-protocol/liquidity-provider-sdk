@@ -2,7 +2,7 @@ import { Address, getContract } from "viem";
 import { Client } from "../Client";
 import { iChromaticLpABI, ierc20MetadataABI } from "../gen";
 import type { ContractChromaticLP, ContractIErc20Metadata } from "../types";
-import { MAX_UINT256, checkClient, handleBytesError } from "../utils/helpers";
+import { checkClient, handleBytesError } from "../utils/helpers";
 
 export const iChromaticMarketABI = [
   {
@@ -185,7 +185,7 @@ export class ChromaticLP {
 
   async lpTokenMeta(lpAddress: Address) {
     return await handleBytesError(async () => {
-      const lpContract = await this.contracts().lpToken(lpAddress);
+      const lpContract = this.contracts().lpToken(lpAddress);
       const [name, symbol, decimals] = await Promise.all([
         lpContract.read.name(),
         lpContract.read.symbol(),
@@ -286,38 +286,46 @@ export class ChromaticLP {
     checkClient(this._client);
     const settlementToken = await this.contracts().settlementToken(lpAddress);
     const account = this._client.walletClient.account!.address;
-    const allowance = await settlementToken.read.allowance([account, lpAddress], {
-      account: account,
-    });
-    if (allowance < amount) {
-      const { request } = await settlementToken.simulate.approve([lpAddress, MAX_UINT256], {
+    const allowance = async () =>
+      await settlementToken.read.allowance([account, lpAddress], {
+        account: account,
+      });
+    const requiredAmount = amount - (await allowance());
+    if (requiredAmount > 0) {
+      const { request } = await settlementToken.simulate.approve([lpAddress, requiredAmount], {
         account: account,
       });
 
       const hash = await this._client.walletClient.writeContract(request);
-      // TODO false condition
       const receipt = await this._client.publicClient.waitForTransactionReceipt({ hash });
-      return receipt !== undefined;
+      if (receipt) {
+        return (await allowance()) >= amount;
+      }
+      return false;
     }
     return true;
   }
 
   async approveLpTokenToLp(lpAddress: Address, amount: bigint): Promise<boolean> {
     checkClient(this._client);
-    const lpToken = await this.contracts().lpToken(lpAddress);
+    const lpToken = this.contracts().lpToken(lpAddress);
     const account = this._client.walletClient.account!.address;
-    const allowance = await lpToken.read.allowance([account, lpAddress], {
-      account: account,
-    });
-    if (allowance < amount) {
-      const { request } = await lpToken.simulate.approve([lpAddress, MAX_UINT256], {
+    const allowance = async () =>
+      await lpToken.read.allowance([account, lpAddress], {
+        account: account,
+      });
+    const requiredAmount = amount - (await allowance());
+    if (requiredAmount > 0) {
+      const { request } = await lpToken.simulate.approve([lpAddress, requiredAmount], {
         account: account,
       });
 
       const hash = await this._client.walletClient.writeContract(request);
-      // TODO false condition
       const receipt = await this._client.publicClient.waitForTransactionReceipt({ hash });
-      return receipt !== undefined;
+      if (receipt) {
+        return (await allowance()) >= amount;
+      }
+      return false;
     }
     return true;
   }
@@ -326,7 +334,7 @@ export class ChromaticLP {
     checkClient(this._client);
 
     if (!(await this.approveSettlementTokenToLp(lpAddress, amount))) {
-      return;
+      throw new Error("SettlementToken: insufficient allowance");
     }
     const account = this._client.walletClient.account!.address;
 
@@ -350,7 +358,7 @@ export class ChromaticLP {
     }
 
     if (!(await this.approveLpTokenToLp(lpAddress, lpTokenAmount))) {
-      return;
+      throw new Error("LpToken: insufficient allowance");
     }
     const account = this._client.walletClient.account!.address;
 
