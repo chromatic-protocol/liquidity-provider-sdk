@@ -4,6 +4,12 @@ import { iChromaticLpABI, ierc20MetadataABI } from "../gen";
 import type { ContractChromaticLP, ContractIErc20Metadata } from "../types";
 import { checkClient, handleBytesError } from "../utils/helpers";
 
+export const MIN_GAS_LIMIT_SETTLE_ALL = BigInt(5e7);
+
+export function adjustMakerGasLimit(gas: bigint): bigint {
+  return gas >= MIN_GAS_LIMIT_SETTLE_ALL ? gas : MIN_GAS_LIMIT_SETTLE_ALL;
+}
+
 export const iChromaticMarketABI = [
   {
     stateMutability: "view",
@@ -336,18 +342,22 @@ export class ChromaticLP {
     if (!(await this.approveSettlementTokenToLp(lpAddress, amount))) {
       throw new Error("SettlementToken: insufficient allowance");
     }
-    const account = this._client.walletClient.account!.address;
 
     return await handleBytesError(async () => {
       checkClient(this._client);
 
-      const { request } = await this.contracts()
-        .lp(lpAddress)
-        .simulate.addLiquidity([amount, recipient || account], {
-          account: account,
-        });
-
-      const hash = await this._client.walletClient.writeContract(request);
+      const account = this._client.walletClient.account!.address;
+      const args = [amount, recipient || account] as const;
+      const options = {
+        account: account,
+      };
+      const lp = this.contracts().lp(lpAddress);
+      const { request } = await lp.simulate.addLiquidity(args, options);
+      const estimatedGas = await lp.estimateGas.addLiquidity(args, options);
+      const hash = await this._client.walletClient.writeContract({
+        ...request,
+        gas: adjustMakerGasLimit(estimatedGas),
+      });
       return await this._client.publicClient.waitForTransactionReceipt({ hash });
     });
   }
@@ -360,17 +370,24 @@ export class ChromaticLP {
     if (!(await this.approveLpTokenToLp(lpAddress, lpTokenAmount))) {
       throw new Error("LpToken: insufficient allowance");
     }
-    const account = this._client.walletClient.account!.address;
 
     return await handleBytesError(async () => {
       checkClient(this._client);
-      const { request } = await this.contracts()
-        .lp(lpAddress)
-        .simulate.removeLiquidity([lpTokenAmount, recipient || account], {
-          account: this._client.walletClient.account,
-        });
 
-      const hash = await this._client.walletClient.writeContract(request);
+      const account = this._client.walletClient.account!.address;
+      const args = [lpTokenAmount, recipient || account] as const;
+      const options = {
+        account: account,
+      };
+      const lp = this.contracts().lp(lpAddress);
+
+      const { request } = await lp.simulate.removeLiquidity(args, options);
+      const estimatedGas = await lp.estimateGas.removeLiquidity(args, options);
+
+      const hash = await this._client.walletClient.writeContract({
+        ...request,
+        gas: adjustMakerGasLimit(estimatedGas),
+      });
       return await this._client.publicClient.waitForTransactionReceipt({ hash });
     });
   }
