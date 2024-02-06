@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xcD648EA90F1836fb31d54EBC95363b3e300368eC)
+ * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xEf625c27Aa50c0469F323f95A03B84A3ef6d7226)
  */
 export const chromaticBpFactoryABI = [
   {
@@ -66,7 +66,8 @@ export const chromaticBpFactoryABI = [
           { name: 'maxRaisingTarget', internalType: 'uint256', type: 'uint256' },
           { name: 'startTimeOfWarmup', internalType: 'uint256', type: 'uint256' },
           { name: 'maxDurationOfWarmup', internalType: 'uint256', type: 'uint256' },
-          { name: 'durationOfLockup', internalType: 'uint256', type: 'uint256' }
+          { name: 'durationOfLockup', internalType: 'uint256', type: 'uint256' },
+          { name: 'minDeposit', internalType: 'uint256', type: 'uint256' }
         ]
       }
     ],
@@ -90,14 +91,14 @@ export const chromaticBpFactoryABI = [
 ] as const
 
 /**
- * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xcD648EA90F1836fb31d54EBC95363b3e300368eC)
+ * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xEf625c27Aa50c0469F323f95A03B84A3ef6d7226)
  */
 export const chromaticBpFactoryAddress = {
-  421614: '0xcD648EA90F1836fb31d54EBC95363b3e300368eC'
+  421614: '0xEf625c27Aa50c0469F323f95A03B84A3ef6d7226'
 } as const
 
 /**
- * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xcD648EA90F1836fb31d54EBC95363b3e300368eC)
+ * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xEf625c27Aa50c0469F323f95A03B84A3ef6d7226)
  */
 export const chromaticBpFactoryConfig = {
   address: chromaticBpFactoryAddress,
@@ -224,6 +225,8 @@ export const iChromaticBpABI = [
   { type: 'error', inputs: [], name: 'RefundError' },
   { type: 'error', inputs: [], name: 'RefundZeroAmountError' },
   { type: 'error', inputs: [], name: 'StartTimeError' },
+  { type: 'error', inputs: [], name: 'TooSmallDepositError' },
+  { type: 'error', inputs: [], name: 'TooSmallMinDeposit' },
   { type: 'error', inputs: [], name: 'TooSmallMinRaisingTarget' },
   { type: 'error', inputs: [], name: 'ZeroBPFactory' },
   { type: 'error', inputs: [], name: 'ZeroDepositError' },
@@ -424,6 +427,13 @@ export const iChromaticBpABI = [
     type: 'function',
     inputs: [],
     name: 'maxRaisingTarget',
+    outputs: [{ name: 'amount', internalType: 'uint256', type: 'uint256' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'minDeposit',
     outputs: [{ name: 'amount', internalType: 'uint256', type: 'uint256' }]
   },
   {
