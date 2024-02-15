@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xEf625c27Aa50c0469F323f95A03B84A3ef6d7226)
+ * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xC939Fa2750cBc60b47A5753C633d9236F28b729C)
  */
 export const chromaticBpFactoryABI = [
   {
@@ -91,14 +91,14 @@ export const chromaticBpFactoryABI = [
 ] as const
 
 /**
- * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xEf625c27Aa50c0469F323f95A03B84A3ef6d7226)
+ * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xC939Fa2750cBc60b47A5753C633d9236F28b729C)
  */
 export const chromaticBpFactoryAddress = {
-  421614: '0xEf625c27Aa50c0469F323f95A03B84A3ef6d7226'
+  421614: '0xC939Fa2750cBc60b47A5753C633d9236F28b729C'
 } as const
 
 /**
- * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xEf625c27Aa50c0469F323f95A03B84A3ef6d7226)
+ * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xC939Fa2750cBc60b47A5753C633d9236F28b729C)
  */
 export const chromaticBpFactoryConfig = {
   address: chromaticBpFactoryAddress,
@@ -110,7 +110,7 @@ export const chromaticBpFactoryConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x894B334d4Cb1e089d5038986c4159bC25f43fef0)
+ * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x8ffB3337188E5f9a935d3F8926938C8Ec9D839D3)
  */
 export const chromaticLpRegistryABI = [
   {
@@ -186,14 +186,14 @@ export const chromaticLpRegistryABI = [
 ] as const
 
 /**
- * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x894B334d4Cb1e089d5038986c4159bC25f43fef0)
+ * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x8ffB3337188E5f9a935d3F8926938C8Ec9D839D3)
  */
 export const chromaticLpRegistryAddress = {
-  421614: '0x894B334d4Cb1e089d5038986c4159bC25f43fef0'
+  421614: '0x8ffB3337188E5f9a935d3F8926938C8Ec9D839D3'
 } as const
 
 /**
- * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x894B334d4Cb1e089d5038986c4159bC25f43fef0)
+ * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x8ffB3337188E5f9a935d3F8926938C8Ec9D839D3)
  */
 export const chromaticLpRegistryConfig = {
   address: chromaticLpRegistryAddress,
@@ -720,7 +720,8 @@ export const iChromaticLpABI = [
           { name: 'oracleVersion', internalType: 'uint256', type: 'uint256' },
           { name: 'amount', internalType: 'uint256', type: 'uint256' },
           { name: 'pendingLiquidity', internalType: 'uint256', type: 'uint256' },
-          { name: 'action', internalType: 'enum ChromaticLPAction', type: 'uint8' }
+          { name: 'action', internalType: 'enum ChromaticLPAction', type: 'uint8' },
+          { name: 'needSettle', internalType: 'bool', type: 'bool' }
         ]
       }
     ]
@@ -847,7 +848,8 @@ export const iChromaticLpABI = [
           { name: 'oracleVersion', internalType: 'uint256', type: 'uint256' },
           { name: 'amount', internalType: 'uint256', type: 'uint256' },
           { name: 'pendingLiquidity', internalType: 'uint256', type: 'uint256' },
-          { name: 'action', internalType: 'enum ChromaticLPAction', type: 'uint8' }
+          { name: 'action', internalType: 'enum ChromaticLPAction', type: 'uint8' },
+          { name: 'needSettle', internalType: 'bool', type: 'bool' }
         ]
       }
     ]
@@ -1008,7 +1010,8 @@ export const iChromaticLpABI = [
           { name: 'oracleVersion', internalType: 'uint256', type: 'uint256' },
           { name: 'amount', internalType: 'uint256', type: 'uint256' },
           { name: 'pendingLiquidity', internalType: 'uint256', type: 'uint256' },
-          { name: 'action', internalType: 'enum ChromaticLPAction', type: 'uint8' }
+          { name: 'action', internalType: 'enum ChromaticLPAction', type: 'uint8' },
+          { name: 'needSettle', internalType: 'bool', type: 'bool' }
         ]
       }
     ]
