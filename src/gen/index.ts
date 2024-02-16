@@ -3,7 +3,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xC939Fa2750cBc60b47A5753C633d9236F28b729C)
+ * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0xfb913c25e35F48A0809a0a7420e4Ea77859CFb0E)
+ * - [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xC939Fa2750cBc60b47A5753C633d9236F28b729C)
  */
 export const chromaticBpFactoryABI = [
   {
@@ -91,14 +92,17 @@ export const chromaticBpFactoryABI = [
 ] as const
 
 /**
- * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xC939Fa2750cBc60b47A5753C633d9236F28b729C)
+ * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0xfb913c25e35F48A0809a0a7420e4Ea77859CFb0E)
+ * - [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xC939Fa2750cBc60b47A5753C633d9236F28b729C)
  */
 export const chromaticBpFactoryAddress = {
+  42161: '0xfb913c25e35F48A0809a0a7420e4Ea77859CFb0E',
   421614: '0xC939Fa2750cBc60b47A5753C633d9236F28b729C'
 } as const
 
 /**
- * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xC939Fa2750cBc60b47A5753C633d9236F28b729C)
+ * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0xfb913c25e35F48A0809a0a7420e4Ea77859CFb0E)
+ * - [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0xC939Fa2750cBc60b47A5753C633d9236F28b729C)
  */
 export const chromaticBpFactoryConfig = {
   address: chromaticBpFactoryAddress,
@@ -110,7 +114,8 @@ export const chromaticBpFactoryConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x8ffB3337188E5f9a935d3F8926938C8Ec9D839D3)
+ * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0xc337325525eF17B7852Fd36DA400d3F9eEd51A4a)
+ * - [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x8ffB3337188E5f9a935d3F8926938C8Ec9D839D3)
  */
 export const chromaticLpRegistryABI = [
   {
@@ -186,14 +191,17 @@ export const chromaticLpRegistryABI = [
 ] as const
 
 /**
- * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x8ffB3337188E5f9a935d3F8926938C8Ec9D839D3)
+ * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0xc337325525eF17B7852Fd36DA400d3F9eEd51A4a)
+ * - [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x8ffB3337188E5f9a935d3F8926938C8Ec9D839D3)
  */
 export const chromaticLpRegistryAddress = {
+  42161: '0xc337325525eF17B7852Fd36DA400d3F9eEd51A4a',
   421614: '0x8ffB3337188E5f9a935d3F8926938C8Ec9D839D3'
 } as const
 
 /**
- * [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x8ffB3337188E5f9a935d3F8926938C8Ec9D839D3)
+ * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0xc337325525eF17B7852Fd36DA400d3F9eEd51A4a)
+ * - [__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x8ffB3337188E5f9a935d3F8926938C8Ec9D839D3)
  */
 export const chromaticLpRegistryConfig = {
   address: chromaticLpRegistryAddress,
