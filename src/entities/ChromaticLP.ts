@@ -83,6 +83,15 @@ export class ChromaticLP {
     };
   }
 
+  async suspendMode(lpAddress: Address): Promise<number> {
+    return await handleBytesError(async () => {
+      // 0: not suspended
+      // 1: addLiquidity only suspended
+      // 2: addLiquidity/removeLiquidity both suspended
+      return await this.contracts().lp(lpAddress).read.suspendMode();
+    });
+  }
+
   async marketOf(lpAddress: Address): Promise<Address> {
     return await handleBytesError(async () => {
       return await this.contracts().lp(lpAddress).read.market();
