@@ -545,8 +545,10 @@ export const iChromaticBpABI = [
 export const iChromaticLpABI = [
   { type: 'error', inputs: [], name: 'AddLiquidityNotAllowed' },
   { type: 'error', inputs: [], name: 'AddLiquiditySuspended' },
+  { type: 'error', inputs: [], name: 'AlreadySettled' },
   { type: 'error', inputs: [], name: 'InvalidMinHoldingValueToRebalance' },
   { type: 'error', inputs: [], name: 'InvalidRebalanceBPS' },
+  { type: 'error', inputs: [], name: 'InvalidReceiptId' },
   {
     type: 'error',
     inputs: [{ name: 'targetBPS', internalType: 'uint16', type: 'uint16' }],
@@ -565,12 +567,16 @@ export const iChromaticLpABI = [
     name: 'NotMatchDistributionLength'
   },
   { type: 'error', inputs: [], name: 'NotOwner' },
-  { type: 'error', inputs: [], name: 'OnlyAccessableByOwner' },
+  { type: 'error', inputs: [], name: 'OnlyAccessableByDao' },
   { type: 'error', inputs: [], name: 'OnlyBatchCall' },
+  { type: 'error', inputs: [], name: 'OracleVersionError' },
   { type: 'error', inputs: [], name: 'RemoveLiquiditySuspended' },
   { type: 'error', inputs: [], name: 'TooSmallAmountToAddLiquidity' },
   { type: 'error', inputs: [], name: 'UnknownLPAction' },
+  { type: 'error', inputs: [], name: 'UpgradeFailed' },
+  { type: 'error', inputs: [], name: 'UpgradeFailedNotContractAddress' },
   { type: 'error', inputs: [], name: 'ZeroAddressError' },
+  { type: 'error', inputs: [], name: 'ZeroRemoveLiquidityError' },
   {
     type: 'event',
     anonymous: false,
@@ -595,15 +601,6 @@ export const iChromaticLpABI = [
       { name: 'keeperFee', internalType: 'uint256', type: 'uint256', indexed: false }
     ],
     name: 'AddLiquiditySettled'
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      { name: 'previousOwner', internalType: 'address', type: 'address', indexed: true },
-      { name: 'newOwner', internalType: 'address', type: 'address', indexed: true }
-    ],
-    name: 'OwnershipTransferred'
   },
   {
     type: 'event',
@@ -709,6 +706,15 @@ export const iChromaticLpABI = [
     name: 'SetSuspendMode'
   },
   {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'previousLogic', internalType: 'address', type: 'address', indexed: false },
+      { name: 'newLogic', internalType: 'address', type: 'address', indexed: true }
+    ],
+    name: 'Upgraded'
+  },
+  {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
@@ -733,13 +739,6 @@ export const iChromaticLpABI = [
         ]
       }
     ]
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'allowedProviders',
-    outputs: [{ name: '', internalType: 'address[]', type: 'address[]' }]
   },
   {
     stateMutability: 'view',
@@ -786,6 +785,13 @@ export const iChromaticLpABI = [
   {
     stateMutability: 'view',
     type: 'function',
+    inputs: [{ name: 'receiptId', internalType: 'uint256', type: 'uint256' }],
+    name: 'checkSettleByUser',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
     inputs: [],
     name: 'clbTokenBalances',
     outputs: [{ name: 'balances', internalType: 'uint256[]', type: 'uint256[]' }]
@@ -815,6 +821,13 @@ export const iChromaticLpABI = [
     stateMutability: 'view',
     type: 'function',
     inputs: [],
+    name: 'dao',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
     name: 'distributionRates',
     outputs: [{ name: '', internalType: 'uint16[]', type: 'uint16[]' }]
   },
@@ -838,6 +851,13 @@ export const iChromaticLpABI = [
     inputs: [],
     name: 'feeRates',
     outputs: [{ name: '', internalType: 'int16[]', type: 'int16[]' }]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'receiptId', internalType: 'uint256', type: 'uint256' }],
+    name: 'getMarketReceiptsOf',
+    outputs: [{ name: '', internalType: 'uint256[]', type: 'uint256[]' }]
   },
   {
     stateMutability: 'view',
@@ -886,9 +906,9 @@ export const iChromaticLpABI = [
   {
     stateMutability: 'view',
     type: 'function',
-    inputs: [{ name: 'provider', internalType: 'address', type: 'address' }],
-    name: 'isAllowedProvider',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }]
+    inputs: [],
+    name: 'logicAddress',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }]
   },
   {
     stateMutability: 'view',
@@ -936,13 +956,6 @@ export const iChromaticLpABI = [
     stateMutability: 'view',
     type: 'function',
     inputs: [],
-    name: 'owner',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }]
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
     name: 'pendingClbValue',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
@@ -959,13 +972,6 @@ export const iChromaticLpABI = [
     inputs: [],
     name: 'pendingValue',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'privateMode',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }]
   },
   {
     stateMutability: 'nonpayable',
@@ -990,13 +996,6 @@ export const iChromaticLpABI = [
     inputs: [],
     name: 'rebalanceCheckingInterval',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [{ name: 'provider', internalType: 'address', type: 'address' }],
-    name: 'registerProvider',
-    outputs: []
   },
   {
     stateMutability: 'nonpayable',
@@ -1062,13 +1061,6 @@ export const iChromaticLpABI = [
   {
     stateMutability: 'nonpayable',
     type: 'function',
-    inputs: [{ name: 'isPrivate', internalType: 'bool', type: 'bool' }],
-    name: 'setPrivateMode',
-    outputs: []
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
     inputs: [{ name: 'mode', internalType: 'uint8', type: 'uint8' }],
     name: 'setSuspendMode',
     outputs: []
@@ -1078,7 +1070,7 @@ export const iChromaticLpABI = [
     type: 'function',
     inputs: [{ name: 'receiptId', internalType: 'uint256', type: 'uint256' }],
     name: 'settle',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }]
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
@@ -1122,15 +1114,11 @@ export const iChromaticLpABI = [
   {
     stateMutability: 'nonpayable',
     type: 'function',
-    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
-    name: 'transferOwnership',
-    outputs: []
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [{ name: 'provider', internalType: 'address', type: 'address' }],
-    name: 'unregisterProvider',
+    inputs: [
+      { name: 'logicAddress', internalType: 'address', type: 'address' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' }
+    ],
+    name: 'upgradeTo',
     outputs: []
   },
   {
@@ -1166,6 +1154,13 @@ export const iChromaticLpABI = [
         ]
       }
     ]
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'valueOfSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   }
 ] as const
 
