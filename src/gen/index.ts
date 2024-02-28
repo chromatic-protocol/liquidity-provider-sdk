@@ -545,6 +545,7 @@ export const iChromaticBpABI = [
 export const iChromaticLpABI = [
   { type: 'error', inputs: [], name: 'AddLiquidityNotAllowed' },
   { type: 'error', inputs: [], name: 'AddLiquiditySuspended' },
+  { type: 'error', inputs: [], name: 'AddableBinNotExist' },
   { type: 'error', inputs: [], name: 'AlreadySettled' },
   { type: 'error', inputs: [], name: 'InvalidMinHoldingValueToRebalance' },
   { type: 'error', inputs: [], name: 'InvalidRebalanceBPS' },
@@ -570,6 +571,7 @@ export const iChromaticLpABI = [
   { type: 'error', inputs: [], name: 'OnlyAccessableByDao' },
   { type: 'error', inputs: [], name: 'OnlyBatchCall' },
   { type: 'error', inputs: [], name: 'OracleVersionError' },
+  { type: 'error', inputs: [], name: 'RemovableBinNotExist' },
   { type: 'error', inputs: [], name: 'RemoveLiquiditySuspended' },
   { type: 'error', inputs: [], name: 'TooSmallAmountToAddLiquidity' },
   { type: 'error', inputs: [], name: 'UnknownLPAction' },
