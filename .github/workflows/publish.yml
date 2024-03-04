@@ -20,10 +20,10 @@ jobs:
     if: ${{ github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3 # Checkout our working repository
+    - uses: actions/checkout@v4 # Checkout our working repository
     - name: Conventional Changelog Action
       id: changelog
-      uses: chromatic-protocol/conventional-changelog-action@v4
+      uses: chromatic-protocol/conventional-changelog-action@v5.2.2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         output-file: false
@@ -35,7 +35,7 @@ jobs:
         
         # skip-version-file: false
         # skip-commit: false
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v4
       id: setup-node
       with:
         node-version: 18.15
